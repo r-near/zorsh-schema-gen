@@ -1,6 +1,6 @@
 {
   "name": "@zorsh/schema-gen",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Generate Zorsh schemas from Borsh schema definitions",
   "type": "module",
   "bin": {
