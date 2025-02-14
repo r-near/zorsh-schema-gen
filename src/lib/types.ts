@@ -7,7 +7,7 @@ const RangeSchema = b.struct({
 })
 
 const SequenceSchema = b.struct({
-  lengthWidth: b.u32(),
+  lengthWidth: b.u8(),
   lengthRange: RangeSchema,
   elements: b.string(),
 })
@@ -17,13 +17,13 @@ const TupleSchema = b.struct({
 })
 
 const VariantSchema = b.struct({
-  discriminant: b.u64(),
+  discriminant: b.i64(),
   name: b.string(),
   declaration: b.string(),
 })
 
 const EnumSchema = b.struct({
-  tagWidth: b.u32(),
+  tagWidth: b.u8(),
   variants: b.vec(VariantSchema),
 })
 
@@ -35,7 +35,7 @@ const NamedFieldSchema = b.struct({
 const StructFieldsSchema = b.enum({
   NamedFields: b.vec(NamedFieldSchema),
   UnnamedFields: b.vec(b.string()),
-  Empty: b.struct({}),
+  Empty: b.unit(),
 })
 
 const StructSchema = b.struct({
@@ -44,7 +44,7 @@ const StructSchema = b.struct({
 
 // Main Definition schema as an enum since these are mutually exclusive
 const DefinitionSchema = b.enum({
-  Primitive: b.struct({ size: b.u32() }),
+  Primitive: b.struct({ size: b.u8() }),
   Sequence: SequenceSchema,
   Tuple: TupleSchema,
   Enum: EnumSchema,
