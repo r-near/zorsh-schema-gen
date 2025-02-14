@@ -3,7 +3,7 @@ import { DependencyResolver, SchemaAnalyzer, TypeParser } from "./index.js"
 
 class CodeGenerator {
   generate(container: BorshSchemaContainer, sortedTypes: string[]): string {
-    const output: string[] = ['import { b } from "zorsh";\n']
+    const output: string[] = ['import { b } from "@zorsh/zorsh";\n']
 
     for (const type of sortedTypes) {
       const def = container.definitions.get(type)

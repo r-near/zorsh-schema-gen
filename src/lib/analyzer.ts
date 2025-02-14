@@ -1,12 +1,10 @@
-import type { BorshSchemaContainer } from "."
+import type { BorshSchemaContainer } from "./index.js"
 
 export class SchemaAnalyzer {
   private enumVariants = new Set<string>()
   private originalTypes = new Set<string>()
 
   findOriginalTypes(container: BorshSchemaContainer): string[] {
-    console.log("All definition keys:", Array.from(container.definitions.keys()))
-
     // First collect all enum variants
     for (const [name, def] of container.definitions) {
       if ("Enum" in def && !name.startsWith("Option<")) {
@@ -40,7 +38,6 @@ export class SchemaAnalyzer {
     }
 
     const types = Array.from(this.originalTypes)
-    console.log("Found original types:", types)
     return types
   }
 }

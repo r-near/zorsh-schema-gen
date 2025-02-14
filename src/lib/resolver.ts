@@ -18,9 +18,7 @@ export class DependencyResolver {
       this.dependencies.set(type, deps)
     }
 
-    const sorted = this.topologicalSort()
-    console.log("Sorted dependencies:", sorted)
-    return sorted
+    return this.topologicalSort()
   }
 
   private collectDependencies(def: Definition, container: BorshSchemaContainer): Set<string> {
