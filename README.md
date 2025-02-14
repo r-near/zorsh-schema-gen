@@ -4,33 +4,56 @@ Generate Zorsh schemas from Borsh schema definitions.
 
 ## Quick Start
 
+You can run zorsh-schema-gen using various package managers:
+
 ```bash
-# Install globally
+# NPM
 npm install -g @zorsh/schema-gen
+zorsh-schema-gen generate
 
-# Generate schema from a Borsh schema file
-@zorsh/schema-gen generate schema.bin > schema.ts
+# Or use npx without installing
+npx @zorsh/schema-gen generate
 
-# Or use npx
-npx @zorsh/schema-gen generate schema.bin > schema.ts
+# Using pnpm
+pnpm add -g @zorsh/schema-gen
+zorsh-schema-gen generate
+
+# Or use pnpm dlx without installing
+pnpm dlx @zorsh/schema-gen generate
+
+# Using yarn
+yarn global add @zorsh/schema-gen
+zorsh-schema-gen generate
+
+# Or use yarn dlx without installing
+yarn dlx @zorsh/schema-gen generate
 ```
 
 ## Usage
 
 ### CLI
 
-The CLI tool accepts a Borsh schema file (usually with .bin extension) and generates TypeScript code with Zorsh schema definitions:
+The CLI tool provides an interactive interface to generate TypeScript code with Zorsh schema definitions from Borsh schema files:
 
 ```bash
-# Basic usage
-@zorsh/schema-gen generate input.bin > output.ts
+# Interactive mode (will prompt for all options)
+zorsh-schema-gen generate
 
-# Specify output file
-@zorsh/schema-gen generate input.bin -o output.ts
+# Specify input and output
+zorsh-schema-gen generate input.bin -o output.ts
 
-# Watch mode
-@zorsh/schema-gen generate input.bin -w
+# Format with prettier
+zorsh-schema-gen generate input.bin -o output.ts --prettier
 ```
+
+### Options
+
+- `input` - Path to input .bin file containing Borsh schema
+- `-o, --output <file>` - Output file path
+- `--prettier` - Format output with prettier
+- `--no-exports` - Don't export generated types
+
+If options are not provided, the CLI will prompt for them interactively.
 
 ### Programmatic Usage
 
