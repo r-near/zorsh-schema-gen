@@ -1,5 +1,11 @@
 # @zorsh/schema-gen
 
+## 0.2.1
+
+### Patch Changes
+
+- d94fe15: fix: bin path resolution
+
 ## 0.2.0
 
 ### Minor Changes
