@@ -1,0 +1,12 @@
+[package]
+name = "schema-gen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+borsh = { version = "1.5.5", features = [
+    "borsh-derive",
+    "derive",
+    "unstable__schema",
+] }
+serde = { version = "1.0.217", features = ["derive"] }
