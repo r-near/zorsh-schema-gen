@@ -3,11 +3,24 @@
   "version": "0.2.0",
   "description": "Generate Zorsh schemas from Borsh schema definitions",
   "type": "module",
-  "main": "dist/src/cli/index.js",
-  "types": "dist/src/cli/index.d.ts",
   "bin": {
-    "zorsh-schema-gen": "./dist/bin/zorsh-schema-gen.js"
+    "zorsh-schema-gen": "dist/src/bin/zorsh-schema-gen.js"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/src/lib/index.d.ts",
+      "import": "./dist/src/lib/index.js"
+    },
+    "./cli": {
+      "types": "./dist/src/cli/index.d.ts",
+      "import": "./dist/src/cli/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",

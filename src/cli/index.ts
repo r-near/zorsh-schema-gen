@@ -1,6 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
-import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
 import * as p from "@clack/prompts"
 import { Command } from "commander"
@@ -8,10 +7,8 @@ import pc from "picocolors"
 import * as prettier from "prettier"
 import { BorshSchemaContainerSchema, ZorshGenerator } from "../lib/index.js"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const packageJson = JSON.parse(readFileSync(resolve(__dirname, "../../package.json"), "utf-8"))
+const packagePath = fileURLToPath(await import.meta.resolve("@zorsh/schema-gen/package.json"))
+const packageJson = JSON.parse(readFileSync(packagePath, "utf-8"))
 
 async function generateSchema(inputPath: string, options: { prettier: boolean }) {
   const data = readFileSync(inputPath)
