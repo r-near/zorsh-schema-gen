@@ -1,0 +1,40 @@
+{
+  "name": "@zorsh/schema-gen",
+  "version": "0.1.0",
+  "description": "Generate Zorsh schemas from Borsh schema definitions",
+  "type": "module",
+  "main": "dist/src/cli/index.js",
+  "types": "dist/src/cli/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "biome check --write .",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build",
+    "lefthook": "lefthook install",
+    "check-exports": "attw --pack .",
+    "release": "pnpm build && changeset publish"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.17.3",
+    "@biomejs/biome": "^1.9.4",
+    "@changesets/cli": "^2.27.12",
+    "@types/node": "^22.13.4",
+    "@zorsh/zorsh": "^0.2.1",
+    "lefthook": "^1.10.10",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "ora": "^8.2.0",
+    "prettier": "^3.5.1"
+  },
+  "peerDependencies": {
+    "@zorsh/zorsh": "^0.2.1"
+  }
+}
