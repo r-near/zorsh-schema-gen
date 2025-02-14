@@ -1,106 +1,139 @@
-import { readFileSync, watch, writeFileSync } from "node:fs"
+import { readFileSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
-// cli/index.ts
+import * as p from "@clack/prompts"
 import { Command } from "commander"
-
-import chalk from "chalk"
-import ora from "ora"
+import pc from "picocolors"
 import * as prettier from "prettier"
 import { BorshSchemaContainerSchema, ZorshGenerator } from "../lib/index.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-// Read package.json
 const packageJson = JSON.parse(readFileSync(resolve(__dirname, "../../package.json"), "utf-8"))
 
-const program = new Command()
+async function generateSchema(inputPath: string, options: { prettier: boolean }) {
+  const data = readFileSync(inputPath)
+  const container = BorshSchemaContainerSchema.deserialize(data)
 
-program
-  .name(packageJson.name.split("/")[1]) // Remove the @zorsh/ prefix
-  .description(packageJson.description)
-  .version(packageJson.version)
+  const generator = new ZorshGenerator()
+  let code = generator.generate(container)
 
-program
-  .command("generate")
-  .description("Generate Zorsh schema from a Borsh schema file")
-  .argument("<input>", "Input .bin file containing Borsh schema")
-  .option("-o, --output <file>", "Output file (defaults to stdout)")
-  .option("-w, --watch", "Watch input file for changes")
-  .option("--prettier", "Run prettier on output")
-  .option("--no-exports", "Don't export generated types")
-  .action(async (input, options) => {
-    const inputPath = resolve(input)
-    const generator = new ZorshGenerator()
+  if (options.prettier) {
+    const prettierConfig = process.env.ZORSH_PRETTIER_CONFIG
+      ? JSON.parse(readFileSync(process.env.ZORSH_PRETTIER_CONFIG, "utf-8"))
+      : await prettier.resolveConfig(process.cwd())
 
-    const generateSchema = async () => {
-      const spinner = ora("Generating schema").start()
+    code = await prettier.format(code, {
+      ...prettierConfig,
+      parser: "typescript",
+    })
+  }
+
+  return code
+}
+
+async function main() {
+  const program = new Command()
+    .name(packageJson.name.split("/")[1])
+    .description(packageJson.description)
+    .version(packageJson.version)
+
+  program
+    .command("generate")
+    .description("Generate Zorsh schema from a Borsh schema file")
+    .argument("[input]", "Input .bin file containing Borsh schema")
+    .option("-o, --output <file>", "Output file")
+    .option("--prettier", "Run prettier on output")
+    .option("--no-exports", "Don't export generated types")
+    .action(async (providedInput, providedOptions) => {
+      console.clear()
+      p.intro(`${pc.bgCyan(pc.black(" zorsh schema gen "))}`)
+
       try {
-        // Read and parse schema
-        const data = readFileSync(inputPath)
-        const container = BorshSchemaContainerSchema.deserialize(data)
-
-        // Generate code
-        let code = generator.generate(container)
-
-        // Format with prettier if requested
-        if (options.prettier) {
-          const prettierConfig = process.env.ZORSH_PRETTIER_CONFIG
-            ? JSON.parse(readFileSync(process.env.ZORSH_PRETTIER_CONFIG, "utf-8"))
-            : await prettier.resolveConfig(process.cwd())
-
-          code = await prettier.format(code, {
-            ...prettierConfig,
-            parser: "typescript",
+        let input = providedInput
+        if (!input) {
+          input = await p.text({
+            message: "Path to schema file:",
+            placeholder: "./schema.bin",
+            validate: (value) => {
+              if (!value) return "Please enter a file path"
+              try {
+                readFileSync(value)
+                return
+              } catch {
+                return "File not found"
+              }
+            },
           })
-        }
 
-        // Output
-        if (options.output) {
-          writeFileSync(options.output, code)
-          spinner.succeed(chalk.green(`Schema written to ${options.output}`))
-        } else {
-          spinner.stop()
-          console.log(code)
-        }
-      } catch (error) {
-        spinner.fail(chalk.red("Error generating schema"))
-        if (error instanceof Error) {
-          console.error(chalk.red(error.message))
-          if (process.env.DEBUG) {
-            console.error(error.stack)
+          if (p.isCancel(input)) {
+            p.cancel("Operation cancelled")
+            process.exit(0)
           }
         }
-        if (!options.watch) {
-          process.exit(1)
+
+        let output = providedOptions.output
+        if (!output) {
+          const result = await p.text({
+            message: "Where should we save the generated schema?",
+            placeholder: "./schema.ts",
+            defaultValue: "./schema.ts",
+          })
+
+          if (p.isCancel(result)) {
+            p.cancel("Operation cancelled")
+            process.exit(0)
+          }
+
+          output = result
         }
+
+        let usePrettier = providedOptions.prettier
+        if (usePrettier === undefined) {
+          usePrettier = await p.confirm({
+            message: "Format output with prettier?",
+            initialValue: true,
+          })
+
+          if (p.isCancel(usePrettier)) {
+            p.cancel("Operation cancelled")
+            process.exit(0)
+          }
+        }
+
+        await p.tasks([
+          {
+            title: "Generating schema",
+            task: async () => {
+              const code = await generateSchema(resolve(input), {
+                prettier: usePrettier,
+              })
+              writeFileSync(output, code)
+              return `Generated ${code.split("\n").length} lines`
+            },
+          },
+        ])
+
+        p.note(`Generated schema at ${pc.cyan(output)}`)
+        p.outro(`${pc.green("✓")} Schema generated successfully!`)
+      } catch (error) {
+        console.log(
+          `${pc.red("✕")} ${error instanceof Error ? error.message : "An unknown error occurred"}`,
+        )
+
+        if (process.env.DEBUG && error instanceof Error) {
+          console.error(error.stack)
+        }
+
+        process.exit(1)
       }
-    }
+    })
 
-    // Initial generation
-    await generateSchema()
-
-    // Watch mode
-    if (options.watch) {
-      console.log(chalk.blue("\nWatching for changes..."))
-      watch(inputPath, { persistent: true }, async (eventType) => {
-        if (eventType === "change") {
-          console.log(chalk.blue("\nFile changed, regenerating..."))
-          await generateSchema()
-        }
-      })
-    }
-  })
-
-// Add error handling for unknown commands
-program.on("command:*", () => {
-  console.error(chalk.red("Invalid command: %s\n"), program.args.join(" "))
-  program.help()
-  process.exit(1)
-})
+  await program.parseAsync()
+}
 
 export const run = () => {
-  program.parse()
+  main().catch(console.error)
 }
