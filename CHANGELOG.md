@@ -1,5 +1,12 @@
 # @zorsh/schema-gen
 
+## 0.2.3
+
+### Patch Changes
+
+- c367aa7: Add support for fixed-length array types in schema generation
+- 3b3a95c: chore(deps-dev): bump the dev-dependencies group across 1 directory with 3 updates
+
 ## 0.2.2
 
 ### Patch Changes
