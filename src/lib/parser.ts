@@ -16,11 +16,14 @@ const knownTypes = {
 } as const
 
 export class TypeParser {
-  parse(input: string) {
+  parse(input: string): string {
     // Clean up the input
     const cleanInput = input.trim()
 
-    // Handle the three cases we can see
+    // Handle the cases we can see
+    if (this.looksLikeAnArray(cleanInput)) {
+      return this.parseArray(cleanInput)
+    }
     if (this.looksLikeATuple(cleanInput)) {
       return this.parseTuple(cleanInput)
     }
@@ -30,12 +33,31 @@ export class TypeParser {
     return this.parsePrimitive(cleanInput)
   }
 
-  private looksLikeATuple(input: string) {
+  private looksLikeAnArray(input: string): boolean {
+    return input.startsWith("[") && input.includes(";") && input.endsWith("]")
+  }
+
+  private looksLikeATuple(input: string): boolean {
     return input.startsWith("(") && input.endsWith(")")
   }
 
-  private looksLikeAGeneric(input: string) {
+  private looksLikeAGeneric(input: string): boolean {
     return input.includes("<") && input.endsWith(">")
+  }
+
+  private parseArray(input: string): string {
+    // Extract the element type and size from [type; size]
+    const match = input.match(/\[(.*?)\s*;\s*(\d+)\]/)
+    if (!match) {
+      throw new Error(`Invalid array type: ${input}`)
+    }
+
+    const [, elementType, size] = match
+    if (!elementType) {
+      throw new Error(`Invalid array type: ${input}`)
+    }
+    const parsedElementType = this.parse(elementType)
+    return `b.array(${parsedElementType}, ${size})`
   }
 
   private parseTuple(input: string): string {
@@ -89,8 +111,8 @@ export class TypeParser {
     let depth = 0
 
     for (const char of input) {
-      if (char === "(" || char === "<") depth++
-      if (char === ")" || char === ">") depth--
+      if (char === "(" || char === "<" || char === "[") depth++
+      if (char === ")" || char === ">" || char === "]") depth--
 
       if (char === delimiter && depth === 0) {
         results.push(current.trim())
