@@ -16,6 +16,8 @@ describe("ZorshGenerator", () => {
     const generator = new ZorshGenerator()
     const code = generator.generate(container)
 
+    expect(code).toMatchSnapshot()
+
     // Basic validation
     expect(code).toContain('import { b } from "@zorsh/zorsh"')
 
