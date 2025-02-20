@@ -1,5 +1,11 @@
 # @zorsh/schema-gen
 
+## 0.2.4
+
+### Patch Changes
+
+- f66051e: test: add snapshot for code generator
+
 ## 0.2.3
 
 ### Patch Changes
