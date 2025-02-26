@@ -1,5 +1,12 @@
 # @zorsh/schema-gen
 
+## 0.2.4
+
+### Patch Changes
+
+- 3ece76c: chore(deps): bump the dev-dependencies group across 1 directory with 6 updates
+- f66051e: test: add snapshot for code generator
+
 ## 0.2.3
 
 ### Patch Changes
