@@ -34,8 +34,8 @@ importers:
         specifier: ^22.13.4
         version: 22.13.5
       '@zorsh/zorsh':
-        specifier: ^0.2.1
-        version: 0.2.3
+        specifier: ^0.3.0
+        version: 0.3.0
       lefthook:
         specifier: ^1.10.10
         version: 1.11.2
@@ -44,7 +44,7 @@ importers:
         version: 4.19.3
       typescript:
         specifier: ^5.7.3
-        version: 5.7.3
+        version: 5.8.2
       vitest:
         specifier: ^3.0.5
         version: 3.0.7(@types/node@22.13.5)(tsx@4.19.3)
@@ -499,8 +499,8 @@ packages:
   '@vitest/utils@3.0.7':
     resolution: {integrity: sha512-xePVpCRfooFX3rANQjwoditoXgWb1MaFbzmGuPP59MK6i13mrnDw/yEIyJudLeW6/38mCNcwCiJIGmpDPibAIg==}
 
-  '@zorsh/zorsh@0.2.3':
-    resolution: {integrity: sha512-ifeRpa8rqRuSHg2zXSgb2NaJMEUKTeA5ltucws+gMwIxNeC43yoyg59kOdUBjLDLQKfa0FrCZTmAGmCmhtFpMw==}
+  '@zorsh/zorsh@0.3.0':
+    resolution: {integrity: sha512-/1fHHe+GugZOUWyBBjxKQwm0nibyT3adabuWl81ixQ7HmUGxb079+5IOZtb78Ri/v+KL+YAA6YGwhZwtDK45AQ==}
 
   ansi-colors@4.1.3:
     resolution: {integrity: sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==}
@@ -1122,8 +1122,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.7.3:
-    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
+  typescript@5.8.2:
+    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -1679,7 +1679,7 @@ snapshots:
       loupe: 3.1.3
       tinyrainbow: 2.0.0
 
-  '@zorsh/zorsh@0.2.3': {}
+  '@zorsh/zorsh@0.3.0': {}
 
   ansi-colors@4.1.3: {}
 
@@ -2241,7 +2241,7 @@ snapshots:
 
   typescript@5.6.1-rc: {}
 
-  typescript@5.7.3: {}
+  typescript@5.8.2: {}
 
   undici-types@6.20.0: {}
 
