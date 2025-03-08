@@ -1,5 +1,12 @@
 # @zorsh/schema-gen
 
+## 0.2.5
+
+### Patch Changes
+
+- 4e99fa6: chore(deps): bump the dev-dependencies group across 1 directory with 6 updates
+- ad97614: chore(deps-dev): bump the dev-dependencies group with 2 updates
+
 ## 0.2.4
 
 ### Patch Changes
