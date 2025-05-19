@@ -38,7 +38,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.17.3",
+    "@arethetypeswrong/cli": "^0.18.1",
     "@biomejs/biome": "^1.9.4",
     "@changesets/cli": "^2.27.12",
     "@types/node": "^22.13.4",
@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.10.0",
-    "commander": "^13.1.0",
+    "commander": "^14.0.0",
     "picocolors": "^1.1.1",
     "prettier": "^3.5.1"
   },
