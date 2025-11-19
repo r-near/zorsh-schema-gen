@@ -38,23 +38,23 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.17.3",
-    "@biomejs/biome": "^1.9.4",
+    "@arethetypeswrong/cli": "^0.18.2",
+    "@biomejs/biome": "^2.3.6",
     "@changesets/cli": "^2.27.12",
-    "@types/node": "^22.13.4",
-    "@zorsh/zorsh": "^0.3.1",
-    "lefthook": "^1.10.10",
+    "@types/node": "^24.10.1",
+    "@zorsh/zorsh": "^0.4.0",
+    "lefthook": "^2.0.4",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.5"
+    "vitest": "^4.0.10"
   },
   "dependencies": {
-    "@clack/prompts": "^0.10.0",
-    "commander": "^13.1.0",
+    "@clack/prompts": "^0.11.0",
+    "commander": "^14.0.2",
     "picocolors": "^1.1.1",
     "prettier": "^3.5.1"
   },
   "peerDependencies": {
-    "@zorsh/zorsh": "^0.3.1"
+    "@zorsh/zorsh": "^0.4.0"
   }
 }
