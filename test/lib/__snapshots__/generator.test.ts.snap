@@ -130,8 +130,8 @@ export const PlayerCharacterSchema = b.struct({
   friends: b.hashSet(b.string()),
   blocked_players: b.hashSet(b.string()),
   settings: b.hashMap(b.string(), b.string()),
-  last_deaths: b.vec(b.tuple([b.u64(), LocationSchema, b.string()])),
-  skill_levels: b.hashMap(b.string(), b.tuple([b.u16(), b.f32()]))
+  last_deaths: b.vec(b.tuple(b.u64(), LocationSchema, b.string())),
+  skill_levels: b.hashMap(b.string(), b.tuple(b.u16(), b.f32()))
 });
 export type PlayerCharacter = b.infer<typeof PlayerCharacterSchema>;"
 `;

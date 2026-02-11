@@ -1,0 +1,712 @@
+{
+  "declaration": "PlayerCharacter",
+  "definitions": {
+    "()": {
+      "Primitive": 0
+    },
+    "(String, (u16, f32))": {
+      "Tuple": [
+        "String",
+        "(u16, f32)"
+      ]
+    },
+    "(String, Item)": {
+      "Tuple": [
+        "String",
+        "Item"
+      ]
+    },
+    "(String, String)": {
+      "Tuple": [
+        "String",
+        "String"
+      ]
+    },
+    "(String, u32)": {
+      "Tuple": [
+        "String",
+        "u32"
+      ]
+    },
+    "(u16, f32)": {
+      "Tuple": [
+        "u16",
+        "f32"
+      ]
+    },
+    "(u64, Location, String)": {
+      "Tuple": [
+        "u64",
+        "Location",
+        "String"
+      ]
+    },
+    "Achievement": {
+      "Struct": [
+        [
+          "id",
+          "String"
+        ],
+        [
+          "name",
+          "String"
+        ],
+        [
+          "description",
+          "String"
+        ],
+        [
+          "reward_points",
+          "u32"
+        ],
+        [
+          "completed_at",
+          "Option<u64>"
+        ],
+        [
+          "prerequisites",
+          "Vec<String>"
+        ]
+      ]
+    },
+    "CharacterClass": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "Warrior",
+            "CharacterClass__Warrior"
+          ],
+          [
+            1,
+            "Mage",
+            "CharacterClass__Mage"
+          ],
+          [
+            2,
+            "Rogue",
+            "CharacterClass__Rogue"
+          ]
+        ]
+      }
+    },
+    "CharacterClass__Mage": {
+      "Struct": [
+        [
+          "base_stats",
+          "Stats"
+        ],
+        [
+          "spells_known",
+          "Vec<String>"
+        ],
+        [
+          "mana_regen",
+          "f32"
+        ]
+      ]
+    },
+    "CharacterClass__Rogue": {
+      "Struct": [
+        [
+          "base_stats",
+          "Stats"
+        ],
+        [
+          "stealth_level",
+          "u8"
+        ],
+        [
+          "critical_chance",
+          "f32"
+        ]
+      ]
+    },
+    "CharacterClass__Warrior": {
+      "Struct": [
+        "Stats"
+      ]
+    },
+    "GuildMembership": {
+      "Struct": [
+        [
+          "guild_id",
+          "String"
+        ],
+        [
+          "guild_name",
+          "String"
+        ],
+        [
+          "joined_at",
+          "u64"
+        ],
+        [
+          "rank",
+          "String"
+        ],
+        [
+          "permissions",
+          "HashSet<String>"
+        ]
+      ]
+    },
+    "HashMap<String, (u16, f32)>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, (u16, f32))"
+      }
+    },
+    "HashMap<String, Item>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, Item)"
+      }
+    },
+    "HashMap<String, String>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, String)"
+      }
+    },
+    "HashMap<String, u32>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, u32)"
+      }
+    },
+    "HashSet<String>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "String"
+      }
+    },
+    "Item": {
+      "Struct": [
+        [
+          "id",
+          "String"
+        ],
+        [
+          "name",
+          "String"
+        ],
+        [
+          "description",
+          "String"
+        ],
+        [
+          "rarity",
+          "ItemRarity"
+        ],
+        [
+          "level_requirement",
+          "u8"
+        ],
+        [
+          "effects",
+          "Vec<ItemEffect>"
+        ],
+        [
+          "stats",
+          "Option<Stats>"
+        ],
+        [
+          "metadata",
+          "HashMap<String, String>"
+        ]
+      ]
+    },
+    "ItemEffect": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "Damage",
+            "ItemEffect__Damage"
+          ],
+          [
+            1,
+            "Heal",
+            "ItemEffect__Heal"
+          ],
+          [
+            2,
+            "Status",
+            "ItemEffect__Status"
+          ],
+          [
+            3,
+            "None",
+            "ItemEffect__None"
+          ]
+        ]
+      }
+    },
+    "ItemEffect__Damage": {
+      "Struct": [
+        "u32"
+      ]
+    },
+    "ItemEffect__Heal": {
+      "Struct": [
+        [
+          "amount",
+          "u32"
+        ],
+        [
+          "duration",
+          "u16"
+        ]
+      ]
+    },
+    "ItemEffect__None": {
+      "Struct": null
+    },
+    "ItemEffect__Status": {
+      "Struct": [
+        [
+          "effect_type",
+          "String"
+        ],
+        [
+          "power",
+          "u16"
+        ],
+        [
+          "duration",
+          "u32"
+        ]
+      ]
+    },
+    "ItemRarity": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "Common",
+            "ItemRarity__Common"
+          ],
+          [
+            1,
+            "Uncommon",
+            "ItemRarity__Uncommon"
+          ],
+          [
+            2,
+            "Rare",
+            "ItemRarity__Rare"
+          ],
+          [
+            3,
+            "Epic",
+            "ItemRarity__Epic"
+          ],
+          [
+            4,
+            "Legendary",
+            "ItemRarity__Legendary"
+          ]
+        ]
+      }
+    },
+    "ItemRarity__Common": {
+      "Struct": null
+    },
+    "ItemRarity__Epic": {
+      "Struct": null
+    },
+    "ItemRarity__Legendary": {
+      "Struct": null
+    },
+    "ItemRarity__Rare": {
+      "Struct": null
+    },
+    "ItemRarity__Uncommon": {
+      "Struct": null
+    },
+    "Location": {
+      "Struct": [
+        [
+          "lat",
+          "f64"
+        ],
+        [
+          "lng",
+          "f64"
+        ],
+        [
+          "altitude",
+          "Option<u32>"
+        ]
+      ]
+    },
+    "Option<GuildMembership>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "GuildMembership"
+          ]
+        ]
+      }
+    },
+    "Option<Stats>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "Stats"
+          ]
+        ]
+      }
+    },
+    "Option<u32>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "u32"
+          ]
+        ]
+      }
+    },
+    "Option<u64>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "u64"
+          ]
+        ]
+      }
+    },
+    "PlayerCharacter": {
+      "Struct": [
+        [
+          "id",
+          "String"
+        ],
+        [
+          "name",
+          "String"
+        ],
+        [
+          "created_at",
+          "u64"
+        ],
+        [
+          "last_login",
+          "u64"
+        ],
+        [
+          "character_class",
+          "CharacterClass"
+        ],
+        [
+          "level",
+          "u32"
+        ],
+        [
+          "experience",
+          "u64"
+        ],
+        [
+          "location",
+          "Location"
+        ],
+        [
+          "inventory",
+          "Vec<Item>"
+        ],
+        [
+          "equipped_items",
+          "HashMap<String, Item>"
+        ],
+        [
+          "achievements",
+          "Vec<Achievement>"
+        ],
+        [
+          "completed_quests",
+          "HashSet<String>"
+        ],
+        [
+          "active_quests",
+          "Vec<QuestProgress>"
+        ],
+        [
+          "guild",
+          "Option<GuildMembership>"
+        ],
+        [
+          "current_trades",
+          "Vec<Trade>"
+        ],
+        [
+          "friends",
+          "HashSet<String>"
+        ],
+        [
+          "blocked_players",
+          "HashSet<String>"
+        ],
+        [
+          "settings",
+          "HashMap<String, String>"
+        ],
+        [
+          "last_deaths",
+          "Vec<(u64, Location, String)>"
+        ],
+        [
+          "skill_levels",
+          "HashMap<String, (u16, f32)>"
+        ]
+      ]
+    },
+    "QuestProgress": {
+      "Struct": [
+        [
+          "quest_id",
+          "String"
+        ],
+        [
+          "started_at",
+          "u64"
+        ],
+        [
+          "steps_completed",
+          "Vec<u32>"
+        ],
+        [
+          "current_step",
+          "u32"
+        ],
+        [
+          "collected_items",
+          "HashMap<String, u32>"
+        ]
+      ]
+    },
+    "Stats": {
+      "Struct": [
+        [
+          "strength",
+          "u16"
+        ],
+        [
+          "dexterity",
+          "u16"
+        ],
+        [
+          "intelligence",
+          "u16"
+        ],
+        [
+          "health",
+          "u32"
+        ],
+        [
+          "mana",
+          "u32"
+        ]
+      ]
+    },
+    "String": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "u8"
+      }
+    },
+    "Trade": {
+      "Struct": [
+        [
+          "id",
+          "String"
+        ],
+        [
+          "from_player",
+          "String"
+        ],
+        [
+          "to_player",
+          "String"
+        ],
+        [
+          "items",
+          "Vec<Item>"
+        ],
+        [
+          "gold_amount",
+          "u64"
+        ],
+        [
+          "status",
+          "String"
+        ],
+        [
+          "created_at",
+          "u64"
+        ],
+        [
+          "completed_at",
+          "Option<u64>"
+        ]
+      ]
+    },
+    "Vec<(u64, Location, String)>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(u64, Location, String)"
+      }
+    },
+    "Vec<Achievement>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "Achievement"
+      }
+    },
+    "Vec<Item>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "Item"
+      }
+    },
+    "Vec<ItemEffect>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "ItemEffect"
+      }
+    },
+    "Vec<QuestProgress>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "QuestProgress"
+      }
+    },
+    "Vec<String>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "String"
+      }
+    },
+    "Vec<Trade>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "Trade"
+      }
+    },
+    "Vec<u32>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "u32"
+      }
+    },
+    "f32": {
+      "Primitive": 4
+    },
+    "f64": {
+      "Primitive": 8
+    },
+    "u16": {
+      "Primitive": 2
+    },
+    "u32": {
+      "Primitive": 4
+    },
+    "u64": {
+      "Primitive": 8
+    },
+    "u8": {
+      "Primitive": 1
+    }
+  }
+}

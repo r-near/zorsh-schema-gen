@@ -1,18 +1,14 @@
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { describe, expect, it } from "vitest"
-import { BorshSchemaContainerSchema, ZorshGenerator } from "../../src/lib/index.js"
+import type { BorshSchemaContainer } from "../../src/lib/types.js"
+import { ZorshGenerator } from "../../src/lib/index.js"
 
 describe("ZorshGenerator", () => {
   it("should generate valid schema from complex example", () => {
-    // Read the schema.bin
-    const schemaPath = join(__dirname, "..", "fixtures", "complex_schema.bin")
-    const data = readFileSync(schemaPath)
+    const schemaPath = join(__dirname, "..", "fixtures", "complex_schema.json")
+    const container = JSON.parse(readFileSync(schemaPath, "utf-8")) as BorshSchemaContainer
 
-    // Parse it
-    const container = BorshSchemaContainerSchema.deserialize(data)
-
-    // Generate code
     const generator = new ZorshGenerator()
     const code = generator.generate(container)
 

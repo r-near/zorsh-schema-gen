@@ -7,44 +7,31 @@ describe("SchemaAnalyzer", () => {
     const analyzer = new SchemaAnalyzer()
     const container: BorshSchemaContainer = {
       declaration: "Item",
-      definitions: new Map([
-        [
-          "Item",
-          {
-            Struct: {
-              fields: {
-                NamedFields: [
-                  { name: "id", declaration: "String" },
-                  { name: "count", declaration: "u32" },
-                  { name: "tags", declaration: "Vec<String>" },
-                ],
-              },
-            },
+      definitions: {
+        Item: {
+          Struct: [
+            ["id", "String"],
+            ["count", "u32"],
+            ["tags", "Vec<String>"],
+          ],
+        },
+        "Vec<String>": {
+          Sequence: {
+            length_width: 4,
+            length_range: { start: 0, end: 4294967295 },
+            elements: "String",
           },
-        ],
-        [
-          "Vec<String>",
-          {
-            Sequence: {
-              lengthWidth: 4,
-              lengthRange: { start: 0n, end: 4294967295n },
-              elements: "String",
-            },
+        },
+        String: {
+          Sequence: {
+            length_width: 4,
+            length_range: { start: 0, end: 4294967295 },
+            elements: "u8",
           },
-        ],
-        [
-          "String",
-          {
-            Sequence: {
-              lengthWidth: 4,
-              lengthRange: { start: 0n, end: 4294967295n },
-              elements: "u8",
-            },
-          },
-        ],
-        ["u32", { Primitive: { size: 4 } }],
-        ["u8", { Primitive: { size: 1 } }],
-      ]),
+        },
+        u32: { Primitive: 4 },
+        u8: { Primitive: 1 },
+      },
     }
 
     const originalTypes = analyzer.findOriginalTypes(container)
@@ -55,54 +42,36 @@ describe("SchemaAnalyzer", () => {
     const analyzer = new SchemaAnalyzer()
     const container: BorshSchemaContainer = {
       declaration: "ItemEffect",
-      definitions: new Map([
-        [
-          "ItemEffect",
-          {
-            Enum: {
-              tagWidth: 1,
-              variants: [
-                { discriminant: 0n, name: "Damage", declaration: "ItemEffectDamage" },
-                { discriminant: 1n, name: "None", declaration: "()" },
-              ],
-            },
+      definitions: {
+        ItemEffect: {
+          Enum: {
+            tag_width: 1,
+            variants: [
+              [0, "Damage", "ItemEffectDamage"],
+              [1, "None", "()"],
+            ],
           },
-        ],
-        [
-          "ItemEffectDamage",
-          {
-            Struct: {
-              fields: { UnnamedFields: ["u32"] },
-            },
+        },
+        ItemEffectDamage: {
+          Struct: ["u32"],
+        },
+        Stats: {
+          Struct: [["value", "u32"]],
+        },
+        "Option<Stats>": {
+          Enum: {
+            tag_width: 1,
+            variants: [
+              [0, "None", "()"],
+              [1, "Some", "Stats"],
+            ],
           },
-        ],
-        [
-          "Stats",
-          {
-            Struct: {
-              fields: {
-                NamedFields: [{ name: "value", declaration: "u32" }],
-              },
-            },
-          },
-        ],
-        [
-          "Option<Stats>",
-          {
-            Enum: {
-              tagWidth: 1,
-              variants: [
-                { discriminant: 0n, name: "None", declaration: "()" },
-                { discriminant: 1n, name: "Some", declaration: "Stats" },
-              ],
-            },
-          },
-        ],
-      ]),
+        },
+        u32: { Primitive: 4 },
+      },
     }
 
     const originalTypes = analyzer.findOriginalTypes(container)
-    // Should include ItemEffect and Stats, but not ItemEffectDamage
     expect(originalTypes).toContain("ItemEffect")
     expect(originalTypes).toContain("Stats")
     expect(originalTypes).not.toContain("ItemEffectDamage")
@@ -112,71 +81,43 @@ describe("SchemaAnalyzer", () => {
     const analyzer = new SchemaAnalyzer()
     const container: BorshSchemaContainer = {
       declaration: "Root",
-      definitions: new Map([
-        // Built-in types
-        [
-          "String",
-          {
-            Sequence: {
-              lengthWidth: 4,
-              lengthRange: { start: 0n, end: 4294967295n },
-              elements: "u8",
-            },
+      definitions: {
+        String: {
+          Sequence: {
+            length_width: 4,
+            length_range: { start: 0, end: 4294967295 },
+            elements: "u8",
           },
-        ],
-        ["u32", { Primitive: { size: 4 } }],
-
-        // Generated collection types
-        [
-          "Vec<String>",
-          {
-            Sequence: {
-              lengthWidth: 4,
-              lengthRange: { start: 0n, end: 4294967295n },
-              elements: "String",
-            },
+        },
+        u32: { Primitive: 4 },
+        "Vec<String>": {
+          Sequence: {
+            length_width: 4,
+            length_range: { start: 0, end: 4294967295 },
+            elements: "String",
           },
-        ],
-        [
-          "HashMap<String, u32>",
-          {
-            Sequence: {
-              lengthWidth: 4,
-              lengthRange: { start: 0n, end: 4294967295n },
-              elements: "(String, u32)",
-            },
+        },
+        "HashMap<String, u32>": {
+          Sequence: {
+            length_width: 4,
+            length_range: { start: 0, end: 4294967295 },
+            elements: "(String, u32)",
           },
-        ],
-
-        // Tuple types
-        ["(String, u32)", { Tuple: { elements: ["String", "u32"] } }],
-
-        // Option types
-        [
-          "Option<String>",
-          {
-            Enum: {
-              tagWidth: 1,
-              variants: [
-                { discriminant: 0n, name: "None", declaration: "()" },
-                { discriminant: 1n, name: "Some", declaration: "String" },
-              ],
-            },
+        },
+        "(String, u32)": { Tuple: ["String", "u32"] },
+        "Option<String>": {
+          Enum: {
+            tag_width: 1,
+            variants: [
+              [0, "None", "()"],
+              [1, "Some", "String"],
+            ],
           },
-        ],
-
-        // Real type
-        [
-          "Root",
-          {
-            Struct: {
-              fields: {
-                NamedFields: [{ name: "data", declaration: "String" }],
-              },
-            },
-          },
-        ],
-      ]),
+        },
+        Root: {
+          Struct: [["data", "String"]],
+        },
+      },
     }
 
     const originalTypes = analyzer.findOriginalTypes(container)

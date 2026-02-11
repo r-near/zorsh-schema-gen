@@ -1,64 +1,79 @@
-import { b } from "@zorsh/zorsh"
+// JSON types matching the borsh-schema-export / near-abi JSON format.
+// These are plain TypeScript interfaces — no Zorsh dependency needed for parsing.
 
-// Helper schemas for nested structures
-const RangeSchema = b.struct({
-  start: b.u64(),
-  end: b.u64(),
-})
+export interface BorshSchemaContainer {
+  declaration: string
+  definitions: Record<string, Definition>
+}
 
-const SequenceSchema = b.struct({
-  lengthWidth: b.u8(),
-  lengthRange: RangeSchema,
-  elements: b.string(),
-})
+export type Definition =
+  | { Primitive: number }
+  | { Sequence: SequenceDefinition }
+  | { Tuple: string[] }
+  | { Enum: EnumDefinition }
+  | { Struct: StructFields }
 
-const TupleSchema = b.struct({
-  elements: b.vec(b.string()),
-})
+export interface SequenceDefinition {
+  length_width: number
+  length_range: { start: number; end: number }
+  elements: string
+}
 
-const VariantSchema = b.struct({
-  discriminant: b.i64(),
-  name: b.string(),
-  declaration: b.string(),
-})
+export interface EnumDefinition {
+  tag_width: number
+  variants: [number, string, string][] // [discriminant, name, declaration]
+}
 
-const EnumSchema = b.struct({
-  tagWidth: b.u8(),
-  variants: b.vec(VariantSchema),
-})
+// Untagged union matching near-abi's serde format:
+// Named: [["field", "type"], ...]
+// Unnamed: ["type", ...]
+// Empty: null
+export type StructFields =
+  | [string, string][] // named fields
+  | string[] // unnamed fields
+  | null // empty/unit struct
 
-const NamedFieldSchema = b.struct({
-  name: b.string(),
-  declaration: b.string(),
-})
+// --- Helpers to distinguish struct field variants ---
 
-const StructFieldsSchema = b.enum({
-  NamedFields: b.vec(NamedFieldSchema),
-  UnnamedFields: b.vec(b.string()),
-  Empty: b.unit(),
-})
+export function isNamedFields(fields: StructFields): fields is [string, string][] {
+  if (fields === null || fields.length === 0) return false
+  const first = fields[0]
+  return Array.isArray(first)
+}
 
-const StructSchema = b.struct({
-  fields: StructFieldsSchema,
-})
+export function isUnnamedFields(fields: StructFields): fields is string[] {
+  if (fields === null || fields.length === 0) return false
+  const first = fields[0]
+  return typeof first === "string"
+}
 
-// Main Definition schema as an enum since these are mutually exclusive
-const DefinitionSchema = b.enum({
-  Primitive: b.struct({ size: b.u8() }),
-  Sequence: SequenceSchema,
-  Tuple: TupleSchema,
-  Enum: EnumSchema,
-  Struct: StructSchema,
-})
+export function isEmptyFields(fields: StructFields): boolean {
+  return fields === null || fields.length === 0
+}
 
-export const BorshSchemaContainerSchema = b.struct({
-  declaration: b.string(),
-  definitions: b.hashMap(b.string(), DefinitionSchema),
-})
+// --- Helpers to identify definition variants ---
 
-export type Definition = b.infer<typeof DefinitionSchema>
-export type DefinitionEnum = b.infer<typeof EnumSchema>
-export type DefinitionStruct = b.infer<typeof StructSchema>
-export type DefinitionSequence = b.infer<typeof SequenceSchema>
-export type DefinitionTuple = b.infer<typeof TupleSchema>
-export type BorshSchemaContainer = b.infer<typeof BorshSchemaContainerSchema>
+export function isPrimitive(def: Definition): def is { Primitive: number } {
+  return "Primitive" in def
+}
+
+export function isSequence(def: Definition): def is { Sequence: SequenceDefinition } {
+  return "Sequence" in def
+}
+
+export function isTuple(def: Definition): def is { Tuple: string[] } {
+  return "Tuple" in def
+}
+
+export function isEnum(def: Definition): def is { Enum: EnumDefinition } {
+  return "Enum" in def
+}
+
+export function isStruct(def: Definition): def is { Struct: StructFields } {
+  return "Struct" in def
+}
+
+// --- Legacy binary support ---
+
+// Re-export the Zorsh-based binary deserializer for backward compatibility
+export { BorshSchemaContainerSchema, convertBinaryContainer } from "./types-binary.js"
