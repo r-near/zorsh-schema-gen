@@ -1,0 +1,991 @@
+{
+  "declaration": "BlockHeader",
+  "definitions": {
+    "()": {
+      "Primitive": 0
+    },
+    "(ShardId, String)": {
+      "Tuple": [
+        "ShardId",
+        "String"
+      ]
+    },
+    "BlockHeader": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "BlockHeaderV1",
+            "BlockHeader__BlockHeaderV1"
+          ],
+          [
+            1,
+            "BlockHeaderV2",
+            "BlockHeader__BlockHeaderV2"
+          ],
+          [
+            2,
+            "BlockHeaderV3",
+            "BlockHeader__BlockHeaderV3"
+          ],
+          [
+            3,
+            "BlockHeaderV4",
+            "BlockHeader__BlockHeaderV4"
+          ],
+          [
+            4,
+            "BlockHeaderV5",
+            "BlockHeader__BlockHeaderV5"
+          ],
+          [
+            5,
+            "BlockHeaderV6",
+            "BlockHeader__BlockHeaderV6"
+          ]
+        ]
+      }
+    },
+    "BlockHeaderInnerLite": {
+      "Struct": [
+        [
+          "height",
+          "u64"
+        ],
+        [
+          "epoch_id",
+          "EpochId"
+        ],
+        [
+          "next_epoch_id",
+          "EpochId"
+        ],
+        [
+          "prev_state_root",
+          "CryptoHash"
+        ],
+        [
+          "prev_outcome_root",
+          "CryptoHash"
+        ],
+        [
+          "timestamp",
+          "u64"
+        ],
+        [
+          "next_bp_hash",
+          "CryptoHash"
+        ],
+        [
+          "block_merkle_root",
+          "CryptoHash"
+        ]
+      ]
+    },
+    "BlockHeaderInnerRest": {
+      "Struct": [
+        [
+          "prev_chunk_outgoing_receipts_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_headers_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_tx_root",
+          "CryptoHash"
+        ],
+        [
+          "chunks_included",
+          "u64"
+        ],
+        [
+          "challenges_root",
+          "CryptoHash"
+        ],
+        [
+          "random_value",
+          "CryptoHash"
+        ],
+        [
+          "prev_validator_proposals",
+          "Vec<ValidatorStakeV1>"
+        ],
+        [
+          "chunk_mask",
+          "Vec<bool>"
+        ],
+        [
+          "next_gas_price",
+          "NearToken"
+        ],
+        [
+          "total_supply",
+          "NearToken"
+        ],
+        [
+          "challenges_result",
+          "Vec<SlashedValidator>"
+        ],
+        [
+          "last_final_block",
+          "CryptoHash"
+        ],
+        [
+          "last_ds_final_block",
+          "CryptoHash"
+        ],
+        [
+          "approvals",
+          "Vec<Option<Signature>>"
+        ],
+        [
+          "latest_protocol_version",
+          "u32"
+        ]
+      ]
+    },
+    "BlockHeaderInnerRestV2": {
+      "Struct": [
+        [
+          "prev_chunk_outgoing_receipts_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_headers_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_tx_root",
+          "CryptoHash"
+        ],
+        [
+          "challenges_root",
+          "CryptoHash"
+        ],
+        [
+          "random_value",
+          "CryptoHash"
+        ],
+        [
+          "prev_validator_proposals",
+          "Vec<ValidatorStakeV1>"
+        ],
+        [
+          "chunk_mask",
+          "Vec<bool>"
+        ],
+        [
+          "next_gas_price",
+          "NearToken"
+        ],
+        [
+          "total_supply",
+          "NearToken"
+        ],
+        [
+          "challenges_result",
+          "Vec<SlashedValidator>"
+        ],
+        [
+          "last_final_block",
+          "CryptoHash"
+        ],
+        [
+          "last_ds_final_block",
+          "CryptoHash"
+        ],
+        [
+          "approvals",
+          "Vec<Option<Signature>>"
+        ],
+        [
+          "latest_protocol_version",
+          "u32"
+        ]
+      ]
+    },
+    "BlockHeaderInnerRestV3": {
+      "Struct": [
+        [
+          "prev_chunk_outgoing_receipts_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_headers_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_tx_root",
+          "CryptoHash"
+        ],
+        [
+          "challenges_root",
+          "CryptoHash"
+        ],
+        [
+          "random_value",
+          "CryptoHash"
+        ],
+        [
+          "prev_validator_proposals",
+          "Vec<ValidatorStake>"
+        ],
+        [
+          "chunk_mask",
+          "Vec<bool>"
+        ],
+        [
+          "next_gas_price",
+          "NearToken"
+        ],
+        [
+          "total_supply",
+          "NearToken"
+        ],
+        [
+          "challenges_result",
+          "Vec<SlashedValidator>"
+        ],
+        [
+          "last_final_block",
+          "CryptoHash"
+        ],
+        [
+          "last_ds_final_block",
+          "CryptoHash"
+        ],
+        [
+          "block_ordinal",
+          "u64"
+        ],
+        [
+          "prev_height",
+          "u64"
+        ],
+        [
+          "epoch_sync_data_hash",
+          "Option<CryptoHash>"
+        ],
+        [
+          "approvals",
+          "Vec<Option<Signature>>"
+        ],
+        [
+          "latest_protocol_version",
+          "u32"
+        ]
+      ]
+    },
+    "BlockHeaderInnerRestV4": {
+      "Struct": [
+        [
+          "block_body_hash",
+          "CryptoHash"
+        ],
+        [
+          "prev_chunk_outgoing_receipts_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_headers_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_tx_root",
+          "CryptoHash"
+        ],
+        [
+          "challenges_root",
+          "CryptoHash"
+        ],
+        [
+          "random_value",
+          "CryptoHash"
+        ],
+        [
+          "prev_validator_proposals",
+          "Vec<ValidatorStake>"
+        ],
+        [
+          "chunk_mask",
+          "Vec<bool>"
+        ],
+        [
+          "next_gas_price",
+          "NearToken"
+        ],
+        [
+          "total_supply",
+          "NearToken"
+        ],
+        [
+          "challenges_result",
+          "Vec<SlashedValidator>"
+        ],
+        [
+          "last_final_block",
+          "CryptoHash"
+        ],
+        [
+          "last_ds_final_block",
+          "CryptoHash"
+        ],
+        [
+          "block_ordinal",
+          "u64"
+        ],
+        [
+          "prev_height",
+          "u64"
+        ],
+        [
+          "epoch_sync_data_hash",
+          "Option<CryptoHash>"
+        ],
+        [
+          "approvals",
+          "Vec<Option<Signature>>"
+        ],
+        [
+          "latest_protocol_version",
+          "u32"
+        ]
+      ]
+    },
+    "BlockHeaderInnerRestV5": {
+      "Struct": [
+        [
+          "block_body_hash",
+          "CryptoHash"
+        ],
+        [
+          "prev_chunk_outgoing_receipts_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_headers_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_tx_root",
+          "CryptoHash"
+        ],
+        [
+          "challenges_root",
+          "CryptoHash"
+        ],
+        [
+          "random_value",
+          "CryptoHash"
+        ],
+        [
+          "prev_validator_proposals",
+          "Vec<ValidatorStake>"
+        ],
+        [
+          "chunk_mask",
+          "Vec<bool>"
+        ],
+        [
+          "next_gas_price",
+          "NearToken"
+        ],
+        [
+          "total_supply",
+          "NearToken"
+        ],
+        [
+          "challenges_result",
+          "Vec<SlashedValidator>"
+        ],
+        [
+          "last_final_block",
+          "CryptoHash"
+        ],
+        [
+          "last_ds_final_block",
+          "CryptoHash"
+        ],
+        [
+          "block_ordinal",
+          "u64"
+        ],
+        [
+          "prev_height",
+          "u64"
+        ],
+        [
+          "epoch_sync_data_hash",
+          "Option<CryptoHash>"
+        ],
+        [
+          "approvals",
+          "Vec<Option<Signature>>"
+        ],
+        [
+          "latest_protocol_version",
+          "u32"
+        ],
+        [
+          "chunk_endorsements",
+          "ChunkEndorsementsBitmap"
+        ]
+      ]
+    },
+    "BlockHeaderInnerRestV6": {
+      "Struct": [
+        [
+          "block_body_hash",
+          "CryptoHash"
+        ],
+        [
+          "prev_chunk_outgoing_receipts_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_headers_root",
+          "CryptoHash"
+        ],
+        [
+          "chunk_tx_root",
+          "CryptoHash"
+        ],
+        [
+          "random_value",
+          "CryptoHash"
+        ],
+        [
+          "prev_validator_proposals",
+          "Vec<ValidatorStake>"
+        ],
+        [
+          "chunk_mask",
+          "Vec<bool>"
+        ],
+        [
+          "next_gas_price",
+          "NearToken"
+        ],
+        [
+          "total_supply",
+          "NearToken"
+        ],
+        [
+          "last_final_block",
+          "CryptoHash"
+        ],
+        [
+          "last_ds_final_block",
+          "CryptoHash"
+        ],
+        [
+          "block_ordinal",
+          "u64"
+        ],
+        [
+          "prev_height",
+          "u64"
+        ],
+        [
+          "epoch_sync_data_hash",
+          "Option<CryptoHash>"
+        ],
+        [
+          "approvals",
+          "Vec<Option<Signature>>"
+        ],
+        [
+          "latest_protocol_version",
+          "u32"
+        ],
+        [
+          "chunk_endorsements",
+          "ChunkEndorsementsBitmap"
+        ],
+        [
+          "shard_split",
+          "Option<(ShardId, String)>"
+        ]
+      ]
+    },
+    "BlockHeaderV1": {
+      "Struct": [
+        [
+          "prev_hash",
+          "CryptoHash"
+        ],
+        [
+          "inner_lite",
+          "BlockHeaderInnerLite"
+        ],
+        [
+          "inner_rest",
+          "BlockHeaderInnerRest"
+        ],
+        [
+          "signature",
+          "Signature"
+        ]
+      ]
+    },
+    "BlockHeaderV2": {
+      "Struct": [
+        [
+          "prev_hash",
+          "CryptoHash"
+        ],
+        [
+          "inner_lite",
+          "BlockHeaderInnerLite"
+        ],
+        [
+          "inner_rest",
+          "BlockHeaderInnerRestV2"
+        ],
+        [
+          "signature",
+          "Signature"
+        ]
+      ]
+    },
+    "BlockHeaderV3": {
+      "Struct": [
+        [
+          "prev_hash",
+          "CryptoHash"
+        ],
+        [
+          "inner_lite",
+          "BlockHeaderInnerLite"
+        ],
+        [
+          "inner_rest",
+          "BlockHeaderInnerRestV3"
+        ],
+        [
+          "signature",
+          "Signature"
+        ]
+      ]
+    },
+    "BlockHeaderV4": {
+      "Struct": [
+        [
+          "prev_hash",
+          "CryptoHash"
+        ],
+        [
+          "inner_lite",
+          "BlockHeaderInnerLite"
+        ],
+        [
+          "inner_rest",
+          "BlockHeaderInnerRestV4"
+        ],
+        [
+          "signature",
+          "Signature"
+        ]
+      ]
+    },
+    "BlockHeaderV5": {
+      "Struct": [
+        [
+          "prev_hash",
+          "CryptoHash"
+        ],
+        [
+          "inner_lite",
+          "BlockHeaderInnerLite"
+        ],
+        [
+          "inner_rest",
+          "BlockHeaderInnerRestV5"
+        ],
+        [
+          "signature",
+          "Signature"
+        ]
+      ]
+    },
+    "BlockHeaderV6": {
+      "Struct": [
+        [
+          "prev_hash",
+          "CryptoHash"
+        ],
+        [
+          "inner_lite",
+          "BlockHeaderInnerLite"
+        ],
+        [
+          "inner_rest",
+          "BlockHeaderInnerRestV6"
+        ],
+        [
+          "signature",
+          "Signature"
+        ]
+      ]
+    },
+    "BlockHeader__BlockHeaderV1": {
+      "Struct": [
+        "BlockHeaderV1"
+      ]
+    },
+    "BlockHeader__BlockHeaderV2": {
+      "Struct": [
+        "BlockHeaderV2"
+      ]
+    },
+    "BlockHeader__BlockHeaderV3": {
+      "Struct": [
+        "BlockHeaderV3"
+      ]
+    },
+    "BlockHeader__BlockHeaderV4": {
+      "Struct": [
+        "BlockHeaderV4"
+      ]
+    },
+    "BlockHeader__BlockHeaderV5": {
+      "Struct": [
+        "BlockHeaderV5"
+      ]
+    },
+    "BlockHeader__BlockHeaderV6": {
+      "Struct": [
+        "BlockHeaderV6"
+      ]
+    },
+    "ChunkEndorsementsBitmap": {
+      "Struct": [
+        [
+          "inner",
+          "Vec<Vec<u8>>"
+        ]
+      ]
+    },
+    "CryptoHash": {
+      "Struct": [
+        "[u8; 32]"
+      ]
+    },
+    "ED25519PublicKey": {
+      "Struct": [
+        "[u8; 32]"
+      ]
+    },
+    "ED25519Signature": {
+      "Struct": [
+        "[u8; 64]"
+      ]
+    },
+    "EpochId": {
+      "Struct": [
+        "CryptoHash"
+      ]
+    },
+    "NearToken": {
+      "Struct": [
+        [
+          "inner",
+          "u128"
+        ]
+      ]
+    },
+    "Option<(ShardId, String)>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "(ShardId, String)"
+          ]
+        ]
+      }
+    },
+    "Option<CryptoHash>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "CryptoHash"
+          ]
+        ]
+      }
+    },
+    "Option<Signature>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "Signature"
+          ]
+        ]
+      }
+    },
+    "PublicKey": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "ED25519",
+            "PublicKey__ED25519"
+          ],
+          [
+            1,
+            "SECP256K1",
+            "PublicKey__SECP256K1"
+          ]
+        ]
+      }
+    },
+    "PublicKey__ED25519": {
+      "Struct": [
+        "ED25519PublicKey"
+      ]
+    },
+    "PublicKey__SECP256K1": {
+      "Struct": [
+        "Secp256K1PublicKey"
+      ]
+    },
+    "Secp256K1PublicKey": {
+      "Struct": [
+        "[u8; 64]"
+      ]
+    },
+    "Secp256K1Signature": {
+      "Struct": [
+        "[u8; 65]"
+      ]
+    },
+    "ShardId": {
+      "Struct": [
+        "u64"
+      ]
+    },
+    "Signature": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "ED25519",
+            "Signature__ED25519"
+          ],
+          [
+            1,
+            "SECP256K1",
+            "Signature__SECP256K1"
+          ]
+        ]
+      }
+    },
+    "Signature__ED25519": {
+      "Struct": [
+        "ED25519Signature"
+      ]
+    },
+    "Signature__SECP256K1": {
+      "Struct": [
+        "Secp256K1Signature"
+      ]
+    },
+    "SlashedValidator": {
+      "Struct": [
+        [
+          "account_id",
+          "String"
+        ],
+        [
+          "is_double_sign",
+          "bool"
+        ]
+      ]
+    },
+    "String": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "u8"
+      }
+    },
+    "ValidatorStake": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "V1",
+            "ValidatorStake__V1"
+          ]
+        ]
+      }
+    },
+    "ValidatorStakeV1": {
+      "Struct": [
+        [
+          "account_id",
+          "String"
+        ],
+        [
+          "public_key",
+          "PublicKey"
+        ],
+        [
+          "stake",
+          "NearToken"
+        ]
+      ]
+    },
+    "ValidatorStake__V1": {
+      "Struct": [
+        "ValidatorStakeV1"
+      ]
+    },
+    "Vec<Option<Signature>>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "Option<Signature>"
+      }
+    },
+    "Vec<SlashedValidator>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "SlashedValidator"
+      }
+    },
+    "Vec<ValidatorStake>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "ValidatorStake"
+      }
+    },
+    "Vec<ValidatorStakeV1>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "ValidatorStakeV1"
+      }
+    },
+    "Vec<Vec<u8>>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "Vec<u8>"
+      }
+    },
+    "Vec<bool>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "bool"
+      }
+    },
+    "Vec<u8>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "u8"
+      }
+    },
+    "[u8; 32]": {
+      "Sequence": {
+        "length_width": 0,
+        "length_range": {
+          "start": 32,
+          "end": 32
+        },
+        "elements": "u8"
+      }
+    },
+    "[u8; 64]": {
+      "Sequence": {
+        "length_width": 0,
+        "length_range": {
+          "start": 64,
+          "end": 64
+        },
+        "elements": "u8"
+      }
+    },
+    "[u8; 65]": {
+      "Sequence": {
+        "length_width": 0,
+        "length_range": {
+          "start": 65,
+          "end": 65
+        },
+        "elements": "u8"
+      }
+    },
+    "bool": {
+      "Primitive": 1
+    },
+    "u128": {
+      "Primitive": 16
+    },
+    "u32": {
+      "Primitive": 4
+    },
+    "u64": {
+      "Primitive": 8
+    },
+    "u8": {
+      "Primitive": 1
+    }
+  }
+}

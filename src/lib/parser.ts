@@ -1,110 +1,102 @@
-// Define what we know about types in a declarative way
-const knownTypes = {
-  // Built-in types map directly to builder methods
-  primitives: {
-    String: "b.string()",
-    "()": "b.unit()",
-  },
+// Maps Borsh declaration strings to Zorsh builder expressions.
+// E.g., "Vec<String>" → "b.vec(b.string())"
+//       "HashMap<String, u32>" → "b.hashMap(b.string(), b.u32())"
+//       "CustomType" → "CustomTypeSchema"
 
-  // Generic types and how to build them
-  generics: {
-    Vec: (arg: string) => `b.vec(${arg})`,
-    HashMap: (key: string, value: string) => `b.hashMap(${key}, ${value})`,
-    HashSet: (arg: string) => `b.hashSet(${arg})`,
-    Option: (arg: string) => `b.option(${arg})`,
-  },
-} as const
+const PRIMITIVE_MAP: Record<string, string> = {
+  String: "b.string()",
+  "()": "b.unit()",
+  bool: "b.bool()",
+}
+
+const NUMERIC_PATTERN = /^[uif]\d+$/
+
+const GENERIC_BUILDERS: Record<string, (...args: string[]) => string> = {
+  Vec: (arg: string) => `b.vec(${arg})`,
+  HashMap: (key: string, value: string) => `b.hashMap(${key}, ${value})`,
+  HashSet: (arg: string) => `b.hashSet(${arg})`,
+  Option: (arg: string) => `b.option(${arg})`,
+  BTreeMap: (key: string, value: string) => `b.hashMap(${key}, ${value})`,
+  BTreeSet: (arg: string) => `b.hashSet(${arg})`,
+}
 
 export class TypeParser {
-  parse(input: string): string {
-    // Clean up the input
-    const cleanInput = input.trim()
+  private lazyTypes = new Set<string>()
 
-    // Handle the cases we can see
-    if (this.looksLikeAnArray(cleanInput)) {
-      return this.parseArray(cleanInput)
-    }
-    if (this.looksLikeATuple(cleanInput)) {
-      return this.parseTuple(cleanInput)
-    }
-    if (this.looksLikeAGeneric(cleanInput)) {
-      return this.parseGeneric(cleanInput)
-    }
-    return this.parsePrimitive(cleanInput)
+  /**
+   * Set which types should be wrapped in b.lazy() when referenced.
+   * Used for recursive/self-referential types.
+   */
+  setLazyTypes(types: Set<string>): void {
+    this.lazyTypes = types
   }
 
-  private looksLikeAnArray(input: string): boolean {
+  clearLazyTypes(): void {
+    this.lazyTypes = new Set()
+  }
+
+  parse(input: string): string {
+    const clean = input.trim()
+
+    if (this.isArray(clean)) return this.parseArray(clean)
+    if (this.isTuple(clean)) return this.parseTuple(clean)
+    if (this.isGeneric(clean)) return this.parseGeneric(clean)
+    return this.parsePrimitive(clean)
+  }
+
+  private isArray(input: string): boolean {
     return input.startsWith("[") && input.includes(";") && input.endsWith("]")
   }
 
-  private looksLikeATuple(input: string): boolean {
+  private isTuple(input: string): boolean {
     return input.startsWith("(") && input.endsWith(")")
   }
 
-  private looksLikeAGeneric(input: string): boolean {
+  private isGeneric(input: string): boolean {
     return input.includes("<") && input.endsWith(">")
   }
 
   private parseArray(input: string): string {
-    // Extract the element type and size from [type; size]
-    const match = input.match(/\[(.*?)\s*;\s*(\d+)\]/)
-    if (!match) {
-      throw new Error(`Invalid array type: ${input}`)
-    }
-
-    const [, elementType, size] = match
-    if (!elementType) {
-      throw new Error(`Invalid array type: ${input}`)
-    }
-    const parsedElementType = this.parse(elementType)
-    return `b.array(${parsedElementType}, ${size})`
+    const match = input.match(/^\[(.*?)\s*;\s*(\d+)\]$/)
+    if (!match?.[1]) throw new Error(`Invalid array type: ${input}`)
+    const elementType = this.parse(match[1])
+    return `b.array(${elementType}, ${match[2]})`
   }
 
   private parseTuple(input: string): string {
-    // Remove outer parentheses and split by comma
     const inner = input.slice(1, -1)
+    if (inner.trim() === "") return "b.unit()"
     const elements = this.splitTopLevel(inner, ",")
-
-    // Parse each element and combine
-    const parsed = elements.map((element) => this.parse(element))
-    return `b.tuple([${parsed.join(", ")}])`
+    const parsed = elements.map((e) => this.parse(e))
+    return `b.tuple(${parsed.join(", ")})`
   }
 
   private parseGeneric(input: string): string {
-    // Split into base type and args
     const baseType = input.slice(0, input.indexOf("<"))
     const argsString = input.slice(input.indexOf("<") + 1, -1)
 
-    // Get the builder for this generic type
-    const builder = knownTypes.generics[baseType as keyof typeof knownTypes.generics]
-    if (!builder) {
-      throw new Error(`Unknown generic type: ${baseType}`)
-    }
+    const builder = GENERIC_BUILDERS[baseType]
+    if (!builder) throw new Error(`Unknown generic type: ${baseType}`)
 
-    // Parse the arguments and build
     const args = this.splitTopLevel(argsString, ",")
     const parsedArgs = args.map((arg) => this.parse(arg))
 
-    // @ts-ignore - We know the builder functions accept the correct number of arguments at runtime
-    return builder(...parsedArgs)
+    // biome-ignore lint/suspicious/noExplicitAny: dynamic arity
+    return (builder as any)(...parsedArgs)
   }
 
   private parsePrimitive(input: string): string {
-    // Check if it's a known primitive
-    if (input in knownTypes.primitives) {
-      return knownTypes.primitives[input as keyof typeof knownTypes.primitives]
+    if (input in PRIMITIVE_MAP) return PRIMITIVE_MAP[input]!
+    if (NUMERIC_PATTERN.test(input)) return `b.${input}()`
+    // Custom type → append "Schema" suffix
+    const ref = `${input}Schema`
+    if (this.lazyTypes.has(input)) {
+      return `b.lazy(() => ${ref})`
     }
-
-    // Handle numeric types
-    if (input.match(/^[ui][0-9]+$/) || input.match(/^f[0-9]+$/)) {
-      return `b.${input}()`
-    }
-
-    // Must be a custom type
-    return `${input}Schema`
+    return ref
   }
 
-  // Helper to split by delimiter while respecting nested structures
+  /** Split by delimiter while respecting nested brackets */
   private splitTopLevel(input: string, delimiter: string): string[] {
     const results: string[] = []
     let current = ""
@@ -122,9 +114,8 @@ export class TypeParser {
       }
     }
 
-    if (current) {
-      results.push(current.trim())
-    }
+    const trimmed = current.trim()
+    if (trimmed) results.push(trimmed)
 
     return results
   }

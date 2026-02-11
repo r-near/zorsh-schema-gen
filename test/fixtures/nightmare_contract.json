@@ -1,0 +1,1697 @@
+{
+  "declaration": "ContractState",
+  "definitions": {
+    "((String, String), u64)": {
+      "Tuple": [
+        "(String, String)",
+        "u64"
+      ]
+    },
+    "()": {
+      "Primitive": 0
+    },
+    "(String, HashSet<String>)": {
+      "Tuple": [
+        "String",
+        "HashSet<String>"
+      ]
+    },
+    "(String, NftToken)": {
+      "Tuple": [
+        "String",
+        "NftToken"
+      ]
+    },
+    "(String, String)": {
+      "Tuple": [
+        "String",
+        "String"
+      ]
+    },
+    "(String, Vec<(String, u128)>)": {
+      "Tuple": [
+        "String",
+        "Vec<(String, u128)>"
+      ]
+    },
+    "(String, Vec<(u64, u128)>)": {
+      "Tuple": [
+        "String",
+        "Vec<(u64, u128)>"
+      ]
+    },
+    "(String, Vec<u8>)": {
+      "Tuple": [
+        "String",
+        "Vec<u8>"
+      ]
+    },
+    "(String, f64)": {
+      "Tuple": [
+        "String",
+        "f64"
+      ]
+    },
+    "(String, u128)": {
+      "Tuple": [
+        "String",
+        "u128"
+      ]
+    },
+    "(String, u32)": {
+      "Tuple": [
+        "String",
+        "u32"
+      ]
+    },
+    "(String, u64)": {
+      "Tuple": [
+        "String",
+        "u64"
+      ]
+    },
+    "(TokenAmount, TokenAmount)": {
+      "Tuple": [
+        "TokenAmount",
+        "TokenAmount"
+      ]
+    },
+    "(bool, u128)": {
+      "Tuple": [
+        "bool",
+        "u128"
+      ]
+    },
+    "(u64, String, AuditAction, Option<HashMap<String, String>>)": {
+      "Tuple": [
+        "u64",
+        "String",
+        "AuditAction",
+        "Option<HashMap<String, String>>"
+      ]
+    },
+    "(u64, String, String, Option<String>)": {
+      "Tuple": [
+        "u64",
+        "String",
+        "String",
+        "Option<String>"
+      ]
+    },
+    "(u64, u128)": {
+      "Tuple": [
+        "u64",
+        "u128"
+      ]
+    },
+    "(u64, u32)": {
+      "Tuple": [
+        "u64",
+        "u32"
+      ]
+    },
+    "(u8, u8, u8)": {
+      "Tuple": [
+        "u8",
+        "u8",
+        "u8"
+      ]
+    },
+    "AssetId": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "Native",
+            "AssetId__Native"
+          ],
+          [
+            1,
+            "FungibleToken",
+            "AssetId__FungibleToken"
+          ],
+          [
+            2,
+            "NonFungibleToken",
+            "AssetId__NonFungibleToken"
+          ],
+          [
+            3,
+            "MultiToken",
+            "AssetId__MultiToken"
+          ]
+        ]
+      }
+    },
+    "AssetId__FungibleToken": {
+      "Struct": [
+        "String"
+      ]
+    },
+    "AssetId__MultiToken": {
+      "Struct": [
+        [
+          "contract_id",
+          "String"
+        ],
+        [
+          "token_id",
+          "String"
+        ],
+        [
+          "amount",
+          "TokenAmount"
+        ]
+      ]
+    },
+    "AssetId__Native": {
+      "Struct": null
+    },
+    "AssetId__NonFungibleToken": {
+      "Struct": [
+        [
+          "contract_id",
+          "String"
+        ],
+        [
+          "token_id",
+          "String"
+        ]
+      ]
+    },
+    "Attribute": {
+      "Struct": [
+        [
+          "trait_type",
+          "String"
+        ],
+        [
+          "value",
+          "String"
+        ],
+        [
+          "display_type",
+          "Option<String>"
+        ],
+        [
+          "max_value",
+          "Option<u64>"
+        ]
+      ]
+    },
+    "AuditAction": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "Transfer",
+            "AuditAction__Transfer"
+          ],
+          [
+            1,
+            "Swap",
+            "AuditAction__Swap"
+          ],
+          [
+            2,
+            "Stake",
+            "AuditAction__Stake"
+          ],
+          [
+            3,
+            "Unstake",
+            "AuditAction__Unstake"
+          ],
+          [
+            4,
+            "ProposalCreated",
+            "AuditAction__ProposalCreated"
+          ],
+          [
+            5,
+            "ProposalVoted",
+            "AuditAction__ProposalVoted"
+          ],
+          [
+            6,
+            "ConfigChanged",
+            "AuditAction__ConfigChanged"
+          ],
+          [
+            7,
+            "NftMinted",
+            "AuditAction__NftMinted"
+          ],
+          [
+            8,
+            "NftTransferred",
+            "AuditAction__NftTransferred"
+          ],
+          [
+            9,
+            "BatchAction",
+            "AuditAction__BatchAction"
+          ]
+        ]
+      }
+    },
+    "AuditAction__BatchAction": {
+      "Struct": [
+        "Vec<AuditAction>"
+      ]
+    },
+    "AuditAction__ConfigChanged": {
+      "Struct": [
+        [
+          "key",
+          "String"
+        ],
+        [
+          "old_value",
+          "Option<Vec<u8>>"
+        ],
+        [
+          "new_value",
+          "Vec<u8>"
+        ]
+      ]
+    },
+    "AuditAction__NftMinted": {
+      "Struct": [
+        [
+          "token_id",
+          "String"
+        ],
+        [
+          "owner",
+          "String"
+        ]
+      ]
+    },
+    "AuditAction__NftTransferred": {
+      "Struct": [
+        [
+          "token_id",
+          "String"
+        ],
+        [
+          "from",
+          "String"
+        ],
+        [
+          "to",
+          "String"
+        ]
+      ]
+    },
+    "AuditAction__ProposalCreated": {
+      "Struct": [
+        "u64"
+      ]
+    },
+    "AuditAction__ProposalVoted": {
+      "Struct": [
+        [
+          "proposal_id",
+          "u64"
+        ],
+        [
+          "vote",
+          "Vote"
+        ]
+      ]
+    },
+    "AuditAction__Stake": {
+      "Struct": [
+        [
+          "amount",
+          "u128"
+        ],
+        [
+          "tier",
+          "String"
+        ]
+      ]
+    },
+    "AuditAction__Swap": {
+      "Struct": [
+        [
+          "pool_id",
+          "u64"
+        ],
+        [
+          "amount_in",
+          "TokenAmount"
+        ],
+        [
+          "amount_out",
+          "TokenAmount"
+        ]
+      ]
+    },
+    "AuditAction__Transfer": {
+      "Struct": [
+        [
+          "from",
+          "String"
+        ],
+        [
+          "to",
+          "String"
+        ],
+        [
+          "asset",
+          "AssetId"
+        ],
+        [
+          "amount",
+          "TokenAmount"
+        ]
+      ]
+    },
+    "AuditAction__Unstake": {
+      "Struct": [
+        [
+          "amount",
+          "u128"
+        ],
+        [
+          "tier",
+          "String"
+        ]
+      ]
+    },
+    "ContractState": {
+      "Struct": [
+        [
+          "owner_id",
+          "String"
+        ],
+        [
+          "version",
+          "(u8, u8, u8)"
+        ],
+        [
+          "pools",
+          "Vec<LiquidityPool>"
+        ],
+        [
+          "pool_index",
+          "HashMap<(String, String), u64>"
+        ],
+        [
+          "user_positions",
+          "HashMap<String, Vec<(u64, u128)>>"
+        ],
+        [
+          "proposals",
+          "Vec<Proposal>"
+        ],
+        [
+          "active_proposal_ids",
+          "HashSet<u64>"
+        ],
+        [
+          "council_members",
+          "HashSet<String>"
+        ],
+        [
+          "delegation_map",
+          "HashMap<String, Vec<(String, u128)>>"
+        ],
+        [
+          "tokens",
+          "HashMap<String, NftToken>"
+        ],
+        [
+          "tokens_per_owner",
+          "HashMap<String, HashSet<String>>"
+        ],
+        [
+          "collection_metadata",
+          "TokenMetadata"
+        ],
+        [
+          "staking_tiers",
+          "Vec<StakingTier>"
+        ],
+        [
+          "config",
+          "HashMap<String, Vec<u8>>"
+        ],
+        [
+          "paused_features",
+          "HashSet<String>"
+        ],
+        [
+          "audit_log",
+          "Vec<(u64, String, AuditAction, Option<HashMap<String, String>>)>"
+        ]
+      ]
+    },
+    "HashMap<(String, String), u64>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "((String, String), u64)"
+      }
+    },
+    "HashMap<String, HashSet<String>>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, HashSet<String>)"
+      }
+    },
+    "HashMap<String, NftToken>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, NftToken)"
+      }
+    },
+    "HashMap<String, String>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, String)"
+      }
+    },
+    "HashMap<String, Vec<(String, u128)>>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, Vec<(String, u128)>)"
+      }
+    },
+    "HashMap<String, Vec<(u64, u128)>>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, Vec<(u64, u128)>)"
+      }
+    },
+    "HashMap<String, Vec<u8>>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, Vec<u8>)"
+      }
+    },
+    "HashMap<String, f64>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, f64)"
+      }
+    },
+    "HashMap<String, u128>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, u128)"
+      }
+    },
+    "HashMap<String, u32>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, u32)"
+      }
+    },
+    "HashMap<String, u64>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, u64)"
+      }
+    },
+    "HashMap<bool, u128>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(bool, u128)"
+      }
+    },
+    "HashSet<String>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "String"
+      }
+    },
+    "HashSet<u64>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "u64"
+      }
+    },
+    "LiquidityPool": {
+      "Struct": [
+        [
+          "pool_id",
+          "u64"
+        ],
+        [
+          "token_a",
+          "AssetId"
+        ],
+        [
+          "token_b",
+          "AssetId"
+        ],
+        [
+          "reserve_a",
+          "TokenAmount"
+        ],
+        [
+          "reserve_b",
+          "TokenAmount"
+        ],
+        [
+          "total_shares",
+          "u128"
+        ],
+        [
+          "fee_rate",
+          "u32"
+        ],
+        [
+          "oracle",
+          "Option<PriceOracle>"
+        ],
+        [
+          "user_shares",
+          "HashMap<String, u128>"
+        ]
+      ]
+    },
+    "NftToken": {
+      "Struct": [
+        [
+          "token_id",
+          "String"
+        ],
+        [
+          "owner_id",
+          "String"
+        ],
+        [
+          "metadata",
+          "TokenMetadata"
+        ],
+        [
+          "royalty",
+          "Option<Royalty>"
+        ],
+        [
+          "approved_account_ids",
+          "HashMap<String, u64>"
+        ],
+        [
+          "split_owners",
+          "Option<HashMap<String, u32>>"
+        ],
+        [
+          "transfer_history",
+          "Vec<(u64, String, String, Option<String>)>"
+        ],
+        [
+          "offers",
+          "Vec<TokenOffer>"
+        ]
+      ]
+    },
+    "Option<HashMap<String, String>>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "HashMap<String, String>"
+          ]
+        ]
+      }
+    },
+    "Option<HashMap<String, u32>>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "HashMap<String, u32>"
+          ]
+        ]
+      }
+    },
+    "Option<PriceOracle>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "PriceOracle"
+          ]
+        ]
+      }
+    },
+    "Option<ProposalAction>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "ProposalAction"
+          ]
+        ]
+      }
+    },
+    "Option<Royalty>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "Royalty"
+          ]
+        ]
+      }
+    },
+    "Option<String>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "String"
+          ]
+        ]
+      }
+    },
+    "Option<Vec<(u64, u32)>>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "Vec<(u64, u32)>"
+          ]
+        ]
+      }
+    },
+    "Option<Vec<u64>>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "Vec<u64>"
+          ]
+        ]
+      }
+    },
+    "Option<Vec<u8>>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "Vec<u8>"
+          ]
+        ]
+      }
+    },
+    "Option<[u8; 32]>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "[u8; 32]"
+          ]
+        ]
+      }
+    },
+    "Option<f64>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "f64"
+          ]
+        ]
+      }
+    },
+    "Option<u128>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "u128"
+          ]
+        ]
+      }
+    },
+    "Option<u64>": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "None",
+            "()"
+          ],
+          [
+            1,
+            "Some",
+            "u64"
+          ]
+        ]
+      }
+    },
+    "PriceOracle": {
+      "Struct": [
+        [
+          "source",
+          "String"
+        ],
+        [
+          "price",
+          "u128"
+        ],
+        [
+          "decimals",
+          "u8"
+        ],
+        [
+          "timestamp",
+          "u64"
+        ],
+        [
+          "confidence",
+          "Option<f64>"
+        ]
+      ]
+    },
+    "Proposal": {
+      "Struct": [
+        [
+          "id",
+          "u64"
+        ],
+        [
+          "proposer",
+          "String"
+        ],
+        [
+          "title",
+          "String"
+        ],
+        [
+          "description",
+          "String"
+        ],
+        [
+          "actions",
+          "Vec<ProposalAction>"
+        ],
+        [
+          "status",
+          "ProposalStatus"
+        ],
+        [
+          "votes",
+          "Vec<Vote>"
+        ],
+        [
+          "vote_counts",
+          "HashMap<bool, u128>"
+        ],
+        [
+          "created_at",
+          "u64"
+        ],
+        [
+          "metadata",
+          "HashMap<String, String>"
+        ]
+      ]
+    },
+    "ProposalAction": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "Transfer",
+            "ProposalAction__Transfer"
+          ],
+          [
+            1,
+            "AddLiquidity",
+            "ProposalAction__AddLiquidity"
+          ],
+          [
+            2,
+            "RemoveLiquidity",
+            "ProposalAction__RemoveLiquidity"
+          ],
+          [
+            3,
+            "UpdateConfig",
+            "ProposalAction__UpdateConfig"
+          ],
+          [
+            4,
+            "UpgradeContract",
+            "ProposalAction__UpgradeContract"
+          ],
+          [
+            5,
+            "BatchActions",
+            "ProposalAction__BatchActions"
+          ],
+          [
+            6,
+            "ConditionalAction",
+            "ProposalAction__ConditionalAction"
+          ]
+        ]
+      }
+    },
+    "ProposalAction__AddLiquidity": {
+      "Struct": [
+        [
+          "pool",
+          "LiquidityPool"
+        ],
+        [
+          "amounts",
+          "(TokenAmount, TokenAmount)"
+        ]
+      ]
+    },
+    "ProposalAction__BatchActions": {
+      "Struct": [
+        "Vec<ProposalAction>"
+      ]
+    },
+    "ProposalAction__ConditionalAction": {
+      "Struct": [
+        [
+          "condition",
+          "ProposalCondition"
+        ],
+        [
+          "if_true",
+          "ProposalAction"
+        ],
+        [
+          "if_false",
+          "Option<ProposalAction>"
+        ]
+      ]
+    },
+    "ProposalAction__RemoveLiquidity": {
+      "Struct": [
+        [
+          "pool_id",
+          "u64"
+        ],
+        [
+          "shares",
+          "u128"
+        ],
+        [
+          "min_amounts",
+          "(TokenAmount, TokenAmount)"
+        ]
+      ]
+    },
+    "ProposalAction__Transfer": {
+      "Struct": [
+        [
+          "recipient",
+          "String"
+        ],
+        [
+          "asset",
+          "AssetId"
+        ],
+        [
+          "amount",
+          "TokenAmount"
+        ],
+        [
+          "memo",
+          "Option<String>"
+        ]
+      ]
+    },
+    "ProposalAction__UpdateConfig": {
+      "Struct": [
+        "HashMap<String, String>"
+      ]
+    },
+    "ProposalAction__UpgradeContract": {
+      "Struct": [
+        [
+          "code_hash",
+          "[u8; 32]"
+        ],
+        [
+          "migration_args",
+          "Option<Vec<u8>>"
+        ]
+      ]
+    },
+    "ProposalCondition": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "TimePassed",
+            "ProposalCondition__TimePassed"
+          ],
+          [
+            1,
+            "QuorumReached",
+            "ProposalCondition__QuorumReached"
+          ],
+          [
+            2,
+            "OraclePrice",
+            "ProposalCondition__OraclePrice"
+          ],
+          [
+            3,
+            "And",
+            "ProposalCondition__And"
+          ],
+          [
+            4,
+            "Or",
+            "ProposalCondition__Or"
+          ],
+          [
+            5,
+            "Not",
+            "ProposalCondition__Not"
+          ]
+        ]
+      }
+    },
+    "ProposalCondition__And": {
+      "Struct": [
+        "Vec<ProposalCondition>"
+      ]
+    },
+    "ProposalCondition__Not": {
+      "Struct": [
+        "ProposalCondition"
+      ]
+    },
+    "ProposalCondition__Or": {
+      "Struct": [
+        "Vec<ProposalCondition>"
+      ]
+    },
+    "ProposalCondition__OraclePrice": {
+      "Struct": [
+        [
+          "oracle",
+          "PriceOracle"
+        ],
+        [
+          "above",
+          "Option<u128>"
+        ],
+        [
+          "below",
+          "Option<u128>"
+        ]
+      ]
+    },
+    "ProposalCondition__QuorumReached": {
+      "Struct": [
+        [
+          "threshold",
+          "u128"
+        ]
+      ]
+    },
+    "ProposalCondition__TimePassed": {
+      "Struct": [
+        "u64"
+      ]
+    },
+    "ProposalStatus": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "Draft",
+            "ProposalStatus__Draft"
+          ],
+          [
+            1,
+            "Active",
+            "ProposalStatus__Active"
+          ],
+          [
+            2,
+            "Approved",
+            "ProposalStatus__Approved"
+          ],
+          [
+            3,
+            "Rejected",
+            "ProposalStatus__Rejected"
+          ],
+          [
+            4,
+            "Executed",
+            "ProposalStatus__Executed"
+          ],
+          [
+            5,
+            "Expired",
+            "ProposalStatus__Expired"
+          ]
+        ]
+      }
+    },
+    "ProposalStatus__Active": {
+      "Struct": [
+        [
+          "start_time",
+          "u64"
+        ],
+        [
+          "end_time",
+          "u64"
+        ]
+      ]
+    },
+    "ProposalStatus__Approved": {
+      "Struct": [
+        [
+          "approved_at",
+          "u64"
+        ],
+        [
+          "execution_deadline",
+          "u64"
+        ]
+      ]
+    },
+    "ProposalStatus__Draft": {
+      "Struct": null
+    },
+    "ProposalStatus__Executed": {
+      "Struct": [
+        [
+          "executed_at",
+          "u64"
+        ],
+        [
+          "result",
+          "Vec<u8>"
+        ]
+      ]
+    },
+    "ProposalStatus__Expired": {
+      "Struct": null
+    },
+    "ProposalStatus__Rejected": {
+      "Struct": [
+        [
+          "rejected_at",
+          "u64"
+        ],
+        [
+          "reason",
+          "Option<String>"
+        ]
+      ]
+    },
+    "Royalty": {
+      "Struct": [
+        [
+          "accounts",
+          "HashMap<String, u32>"
+        ],
+        [
+          "max_payout",
+          "Option<u128>"
+        ]
+      ]
+    },
+    "StakingReward": {
+      "Struct": [
+        [
+          "asset",
+          "AssetId"
+        ],
+        [
+          "amount_per_day",
+          "TokenAmount"
+        ],
+        [
+          "vesting_schedule",
+          "Option<Vec<(u64, u32)>>"
+        ],
+        [
+          "multiplier_by_tier",
+          "HashMap<String, f64>"
+        ]
+      ]
+    },
+    "StakingTier": {
+      "Struct": [
+        [
+          "name",
+          "String"
+        ],
+        [
+          "min_stake",
+          "u128"
+        ],
+        [
+          "max_stake",
+          "Option<u128>"
+        ],
+        [
+          "apy_basis_points",
+          "u32"
+        ],
+        [
+          "lockup_period",
+          "u64"
+        ],
+        [
+          "rewards",
+          "Vec<StakingReward>"
+        ],
+        [
+          "eligible_pools",
+          "Option<Vec<u64>>"
+        ],
+        [
+          "bonus_conditions",
+          "Vec<ProposalCondition>"
+        ]
+      ]
+    },
+    "String": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "u8"
+      }
+    },
+    "TokenAmount": {
+      "Struct": [
+        [
+          "amount",
+          "u128"
+        ],
+        [
+          "decimals",
+          "u8"
+        ]
+      ]
+    },
+    "TokenMetadata": {
+      "Struct": [
+        [
+          "title",
+          "Option<String>"
+        ],
+        [
+          "description",
+          "Option<String>"
+        ],
+        [
+          "media",
+          "Option<String>"
+        ],
+        [
+          "media_hash",
+          "Option<[u8; 32]>"
+        ],
+        [
+          "copies",
+          "Option<u64>"
+        ],
+        [
+          "issued_at",
+          "Option<u64>"
+        ],
+        [
+          "expires_at",
+          "Option<u64>"
+        ],
+        [
+          "starts_at",
+          "Option<u64>"
+        ],
+        [
+          "updated_at",
+          "Option<u64>"
+        ],
+        [
+          "extra",
+          "Option<String>"
+        ],
+        [
+          "reference",
+          "Option<String>"
+        ],
+        [
+          "reference_hash",
+          "Option<[u8; 32]>"
+        ],
+        [
+          "attributes",
+          "Vec<Attribute>"
+        ]
+      ]
+    },
+    "TokenOffer": {
+      "Struct": [
+        [
+          "offerer",
+          "String"
+        ],
+        [
+          "amount",
+          "TokenAmount"
+        ],
+        [
+          "asset",
+          "AssetId"
+        ],
+        [
+          "expires_at",
+          "Option<u64>"
+        ],
+        [
+          "conditions",
+          "Vec<ProposalCondition>"
+        ]
+      ]
+    },
+    "Vec<(String, u128)>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(String, u128)"
+      }
+    },
+    "Vec<(u64, String, AuditAction, Option<HashMap<String, String>>)>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(u64, String, AuditAction, Option<HashMap<String, String>>)"
+      }
+    },
+    "Vec<(u64, String, String, Option<String>)>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(u64, String, String, Option<String>)"
+      }
+    },
+    "Vec<(u64, u128)>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(u64, u128)"
+      }
+    },
+    "Vec<(u64, u32)>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "(u64, u32)"
+      }
+    },
+    "Vec<Attribute>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "Attribute"
+      }
+    },
+    "Vec<AuditAction>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "AuditAction"
+      }
+    },
+    "Vec<LiquidityPool>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "LiquidityPool"
+      }
+    },
+    "Vec<Proposal>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "Proposal"
+      }
+    },
+    "Vec<ProposalAction>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "ProposalAction"
+      }
+    },
+    "Vec<ProposalCondition>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "ProposalCondition"
+      }
+    },
+    "Vec<StakingReward>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "StakingReward"
+      }
+    },
+    "Vec<StakingTier>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "StakingTier"
+      }
+    },
+    "Vec<TokenOffer>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "TokenOffer"
+      }
+    },
+    "Vec<Vote>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "Vote"
+      }
+    },
+    "Vec<u64>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "u64"
+      }
+    },
+    "Vec<u8>": {
+      "Sequence": {
+        "length_width": 4,
+        "length_range": {
+          "start": 0,
+          "end": 4294967295
+        },
+        "elements": "u8"
+      }
+    },
+    "Vote": {
+      "Struct": [
+        [
+          "voter",
+          "String"
+        ],
+        [
+          "weight",
+          "VoteWeight"
+        ],
+        [
+          "approve",
+          "bool"
+        ],
+        [
+          "timestamp",
+          "u64"
+        ],
+        [
+          "memo",
+          "Option<String>"
+        ]
+      ]
+    },
+    "VoteWeight": {
+      "Enum": {
+        "tag_width": 1,
+        "variants": [
+          [
+            0,
+            "Equal",
+            "VoteWeight__Equal"
+          ],
+          [
+            1,
+            "TokenWeighted",
+            "VoteWeight__TokenWeighted"
+          ],
+          [
+            2,
+            "QuadraticTokenWeighted",
+            "VoteWeight__QuadraticTokenWeighted"
+          ],
+          [
+            3,
+            "DelegatedFrom",
+            "VoteWeight__DelegatedFrom"
+          ]
+        ]
+      }
+    },
+    "VoteWeight__DelegatedFrom": {
+      "Struct": [
+        "Vec<(String, u128)>"
+      ]
+    },
+    "VoteWeight__Equal": {
+      "Struct": null
+    },
+    "VoteWeight__QuadraticTokenWeighted": {
+      "Struct": [
+        "u128"
+      ]
+    },
+    "VoteWeight__TokenWeighted": {
+      "Struct": [
+        "u128"
+      ]
+    },
+    "[u8; 32]": {
+      "Sequence": {
+        "length_width": 0,
+        "length_range": {
+          "start": 32,
+          "end": 32
+        },
+        "elements": "u8"
+      }
+    },
+    "bool": {
+      "Primitive": 1
+    },
+    "f64": {
+      "Primitive": 8
+    },
+    "u128": {
+      "Primitive": 16
+    },
+    "u32": {
+      "Primitive": 4
+    },
+    "u64": {
+      "Primitive": 8
+    },
+    "u8": {
+      "Primitive": 1
+    }
+  }
+}

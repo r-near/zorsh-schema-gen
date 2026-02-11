@@ -5,17 +5,40 @@ import * as p from "@clack/prompts"
 import { Command } from "commander"
 import pc from "picocolors"
 import * as prettier from "prettier"
-import { BorshSchemaContainerSchema, ZorshGenerator } from "../lib/index.js"
+import type { BorshSchemaContainer } from "../lib/types.js"
+import { BorshSchemaContainerSchema, convertBinaryContainer, ZorshGenerator } from "../lib/index.js"
 
 const packagePath = fileURLToPath(await import.meta.resolve("@zorsh/schema-gen/package.json"))
 const packageJson = JSON.parse(readFileSync(packagePath, "utf-8"))
 
-async function generateSchema(inputPath: string, options: { prettier: boolean }) {
-  const data = readFileSync(inputPath)
+function parseInput(inputPath: string): BorshSchemaContainer | BorshSchemaContainer[] {
+  const resolvedPath = resolve(inputPath)
+  const ext = resolvedPath.split(".").pop()?.toLowerCase()
+
+  if (ext === "json") {
+    // JSON input (from borsh-schema-export or near-abi)
+    const text = readFileSync(resolvedPath, "utf-8")
+    const parsed = JSON.parse(text) as BorshSchemaContainer | BorshSchemaContainer[]
+    return parsed
+  }
+
+  // Binary input (legacy .bin format)
+  const data = readFileSync(resolvedPath)
   const container = BorshSchemaContainerSchema.deserialize(data)
+  return convertBinaryContainer(container)
+}
+
+async function generateSchema(inputPath: string, options: { prettier: boolean }) {
+  const input = parseInput(inputPath)
 
   const generator = new ZorshGenerator()
-  let code = generator.generate(container)
+  let code: string
+
+  if (Array.isArray(input)) {
+    code = generator.generateMulti(input)
+  } else {
+    code = generator.generate(input)
+  }
 
   if (options.prettier) {
     const prettierConfig = process.env.ZORSH_PRETTIER_CONFIG
@@ -39,8 +62,8 @@ async function main() {
 
   program
     .command("generate")
-    .description("Generate Zorsh schema from a Borsh schema file")
-    .argument("[input]", "Input .bin file containing Borsh schema")
+    .description("Generate Zorsh schema from a Borsh schema file (.json or .bin)")
+    .argument("[input]", "Input file (.json or .bin)")
     .option("-o, --output <file>", "Output file")
     .option("--prettier", "Run prettier on output")
     .option("--no-exports", "Don't export generated types")
@@ -53,7 +76,7 @@ async function main() {
         if (!input) {
           input = await p.text({
             message: "Path to schema file:",
-            placeholder: "./schema.bin",
+            placeholder: "./schema.json",
             validate: (value) => {
               if (!value) return "Please enter a file path"
               try {

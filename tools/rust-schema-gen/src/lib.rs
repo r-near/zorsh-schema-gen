@@ -1,6 +1,9 @@
 use borsh::BorshSchema;
 use std::collections::{HashMap, HashSet};
 
+pub mod nearcore_types;
+pub mod nightmare_contract;
+
 #[derive(BorshSchema)]
 pub struct Location {
     lat: f64,
@@ -133,11 +136,16 @@ pub struct PlayerCharacter {
     skill_levels: HashMap<String, (u16, f32)>, // skill name -> (level, progress)
 }
 
-// Export a function to generate schemas
+// Export schemas as borsh binary
 pub fn generate_schema() -> Vec<u8> {
     use borsh::schema::BorshSchemaContainer;
     let container = BorshSchemaContainer::for_type::<PlayerCharacter>();
     borsh::to_vec(&container).unwrap()
+}
+
+// Export schemas as JSON (near-abi compatible format)
+pub fn generate_schema_json() -> String {
+    borsh_schema_export::to_json::<PlayerCharacter>()
 }
 
 #[cfg(test)]
@@ -149,6 +157,56 @@ mod tests {
     fn test_generate_schema() -> std::io::Result<()> {
         let data = generate_schema();
         fs::write("../../test/fixtures/complex_schema.bin", data)?;
+        Ok(())
+    }
+
+    #[test]
+    fn test_generate_schema_json() -> std::io::Result<()> {
+        let json = generate_schema_json();
+        fs::write("../../test/fixtures/complex_schema.json", &json)?;
+        Ok(())
+    }
+
+    #[test]
+    fn test_generate_nightmare_schema_json() -> std::io::Result<()> {
+        let json = borsh_schema_export::to_json::<nightmare_contract::ContractState>();
+        fs::write("../../test/fixtures/nightmare_contract.json", &json)?;
+
+        let parsed: serde_json::Value = serde_json::from_str(&json).unwrap();
+        assert_eq!(parsed["declaration"], "ContractState");
+
+        let def_count = parsed["definitions"].as_object().unwrap().len();
+        println!("nightmare contract schema has {} definitions", def_count);
+        assert!(
+            def_count > 40,
+            "Expected 40+ definitions, got {}",
+            def_count
+        );
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_generate_nearcore_schema_json() -> std::io::Result<()> {
+        let json = borsh_schema_export::to_json::<nearcore_types::BlockHeader>();
+        fs::write("../../test/fixtures/nearcore_block_header.json", &json)?;
+
+        // Sanity check: the JSON should parse and have the right root
+        let parsed: serde_json::Value = serde_json::from_str(&json).unwrap();
+        assert_eq!(parsed["declaration"], "BlockHeader");
+        assert!(parsed["definitions"]["BlockHeader"].is_object());
+        assert!(parsed["definitions"]["BlockHeaderV1"].is_object());
+        assert!(parsed["definitions"]["BlockHeaderV6"].is_object());
+
+        // Count definitions — should be substantial (30+ types)
+        let def_count = parsed["definitions"].as_object().unwrap().len();
+        println!("nearcore BlockHeader schema has {} definitions", def_count);
+        assert!(
+            def_count > 30,
+            "Expected 30+ definitions, got {}",
+            def_count
+        );
+
         Ok(())
     }
 }

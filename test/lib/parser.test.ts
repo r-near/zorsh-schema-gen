@@ -27,15 +27,15 @@ describe("TypeParser", () => {
     },
     {
       input: "(u16, f32)",
-      expected: "b.tuple([b.u16(), b.f32()])",
+      expected: "b.tuple(b.u16(), b.f32())",
     },
     {
       input: "HashMap<String, (u16, f32)>",
-      expected: "b.hashMap(b.string(), b.tuple([b.u16(), b.f32()]))",
+      expected: "b.hashMap(b.string(), b.tuple(b.u16(), b.f32()))",
     },
     {
       input: "Vec<(u64, Location, String)>",
-      expected: "b.vec(b.tuple([b.u64(), LocationSchema, b.string()]))",
+      expected: "b.vec(b.tuple(b.u64(), LocationSchema, b.string()))",
     },
     {
       input: "[u8; 33]",
@@ -49,6 +49,18 @@ describe("TypeParser", () => {
       input: "[Vec<u8>; 10]",
       expected: "b.array(b.vec(b.u8()), 10)",
     },
+    {
+      input: "bool",
+      expected: "b.bool()",
+    },
+    {
+      input: "()",
+      expected: "b.unit()",
+    },
+    {
+      input: "HashSet<String>",
+      expected: "b.hashSet(b.string())",
+    },
   ]
 
   test.each(testCases)("parses and generates code for $input", ({ input, expected }) => {
@@ -58,7 +70,7 @@ describe("TypeParser", () => {
 
   test("handles nested complex types", () => {
     const input = "HashMap<String, Vec<Option<(u32, String)>>>"
-    const expected = "b.hashMap(b.string(), b.vec(b.option(b.tuple([b.u32(), b.string()]))))"
+    const expected = "b.hashMap(b.string(), b.vec(b.option(b.tuple(b.u32(), b.string()))))"
 
     const generated = parser.parse(input)
     expect(generated).toBe(expected)

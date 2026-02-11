@@ -1,4 +1,5 @@
-import type { BorshSchemaContainer, Definition } from "./index.js"
+import type { BorshSchemaContainer, Definition } from "./types.js"
+import { isStruct, isEnum, isNamedFields, isUnnamedFields } from "./types.js"
 
 export class DependencyResolver {
   private dependencies = new Map<string, Set<string>>()
@@ -9,11 +10,9 @@ export class DependencyResolver {
   }
 
   buildDependencyGraph(container: BorshSchemaContainer): string[] {
-    // Build dependencies for each original type
     for (const type of this.originalTypes) {
-      const def = container.definitions.get(type)
+      const def = container.definitions[type]
       if (!def) continue
-
       const deps = this.collectDependencies(def, container)
       this.dependencies.set(type, deps)
     }
@@ -21,33 +20,33 @@ export class DependencyResolver {
     return this.topologicalSort()
   }
 
-  private collectDependencies(def: Definition, container: BorshSchemaContainer): Set<string> {
+  private collectDependencies(
+    def: Definition,
+    container: BorshSchemaContainer,
+  ): Set<string> {
     const deps = new Set<string>()
 
-    if ("Struct" in def) {
-      const structDef = def.Struct
-      if ("NamedFields" in structDef.fields) {
-        for (const field of structDef.fields.NamedFields) {
-          this.addDependency(field.declaration, deps)
+    if (isStruct(def)) {
+      const fields = def.Struct
+      if (isNamedFields(fields)) {
+        for (const [, declaration] of fields) {
+          this.extractDependencies(declaration, deps)
         }
-      } else if ("UnnamedFields" in structDef.fields) {
-        for (const field of structDef.fields.UnnamedFields) {
-          this.addDependency(field, deps)
+      } else if (isUnnamedFields(fields)) {
+        for (const declaration of fields) {
+          this.extractDependencies(declaration, deps)
         }
       }
     }
 
-    // Handle enum variants
-    if ("Enum" in def) {
-      for (const variant of def.Enum.variants) {
-        if (variant.declaration !== "()") {
-          // Skip unit variants
-          const variantDef = container.definitions.get(variant.declaration)
-          if (variantDef) {
-            const variantDeps = this.collectDependencies(variantDef, container)
-            for (const dep of variantDeps) {
-              deps.add(dep)
-            }
+    if (isEnum(def)) {
+      for (const [, , variantDeclaration] of def.Enum.variants) {
+        if (variantDeclaration === "()") continue
+        const variantDef = container.definitions[variantDeclaration]
+        if (variantDef) {
+          const variantDeps = this.collectDependencies(variantDef, container)
+          for (const dep of variantDeps) {
+            deps.add(dep)
           }
         }
       }
@@ -56,17 +55,53 @@ export class DependencyResolver {
     return deps
   }
 
-  private addDependency(type: string, deps: Set<string>) {
-    // Strip out generic wrappers
-    const baseType = type.replace(/^(Vec<|HashMap<|HashSet<|Option<)/, "").replace(/>$/, "")
+  /**
+   * Recursively extract all original type references from a declaration string.
+   * Handles arbitrarily nested generics like Vec<Option<HashMap<String, CustomType>>>.
+   */
+  private extractDependencies(declaration: string, deps: Set<string>): void {
+    // Strip the declaration to find all referenced type names
+    const typeNames = this.extractTypeNames(declaration)
+    for (const name of typeNames) {
+      if (this.originalTypes.has(name)) {
+        deps.add(name)
+      }
+    }
+  }
 
-    // If it's a primitive type or not an original type, skip it
-    if (!this.originalTypes.has(baseType)) {
-      return
+  /**
+   * Extract all type names from a potentially nested declaration string.
+   * E.g., "HashMap<String, Vec<CustomType>>" → ["HashMap", "String", "Vec", "CustomType"]
+   */
+  private extractTypeNames(declaration: string): string[] {
+    const names: string[] = []
+    let current = ""
+
+    for (const char of declaration) {
+      if (char === "<" || char === ">" || char === "," || char === " " || char === "(" || char === ")") {
+        const trimmed = current.trim()
+        if (trimmed && !trimmed.match(/^\d+$/)) {
+          names.push(trimmed)
+        }
+        current = ""
+      } else {
+        current += char
+      }
     }
 
-    deps.add(baseType)
+    const trimmed = current.trim()
+    if (trimmed && !trimmed.match(/^\d+$/)) {
+      names.push(trimmed)
+    }
+
+    return names
   }
+
+  /**
+   * Types that reference themselves (directly or transitively).
+   * These require lazy() support for runtime serialization.
+   */
+  recursiveTypes = new Set<string>()
 
   private topologicalSort(): string[] {
     const sorted: string[] = []
@@ -75,18 +110,17 @@ export class DependencyResolver {
 
     const visit = (node: string) => {
       if (temp.has(node)) {
-        throw new Error(`Circular dependency found: ${node}`)
-      }
-      if (visited.has(node)) {
+        // Circular dependency — mark as recursive and skip
+        this.recursiveTypes.add(node)
         return
       }
-      temp.add(node)
+      if (visited.has(node)) return
 
-      const nodeDeps = this.dependencies.get(node) || new Set()
+      temp.add(node)
+      const nodeDeps = this.dependencies.get(node) ?? new Set()
       for (const dep of nodeDeps) {
         visit(dep)
       }
-
       temp.delete(node)
       visited.add(node)
       sorted.push(node)
